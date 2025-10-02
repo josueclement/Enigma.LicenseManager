@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Enigma.Cryptography.Extensions;
 using Enigma.Cryptography.PublicKey;
+using Newtonsoft.Json;
 using Org.BouncyCastle.Crypto;
 
 namespace Enigma.LicenseManager;
@@ -27,7 +28,15 @@ public class License()
         Signature = rsa.Sign(data, privateKey);
     }
 
-    public bool IsValid(AsymmetricKeyParameter publicKey, string? id = null)
+    private string? GetId() => Type switch
+    {
+        LicenseType.App => IdGenerator.GenerateAppId(),
+        LicenseType.Machine => IdGenerator.GenerateMachineId(),
+        LicenseType.Unlimited => null,
+        _ => throw new InvalidOperationException("Invalid license type.")
+    };
+
+    public bool IsValid(AsymmetricKeyParameter publicKey)
     {
         if (Signature is null)
             throw new InvalidOperationException("Signature is missing.");
@@ -43,11 +52,32 @@ public class License()
 
         if (Type == LicenseType.Unlimited)
             return true;
+        
+        var id = GetId();
 
         if (Id is not null && id is not null && Id == id)
             return true;
 
         return false;
+    }
+
+    public async Task SaveAsync(string filePath)
+    {
+        var json = JsonConvert.SerializeObject(this, Formatting.Indented);
+        using var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write);
+        using var sw = new StreamWriter(fs);
+        await sw.WriteAsync(json);
+    }
+
+    public static async Task<License?> LoadAsync(string filePath)
+    {
+        if (!File.Exists(filePath))
+            return null;
+
+        using var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+        using var sr = new StreamReader(fs);
+        var json = await sr.ReadToEndAsync();
+        return JsonConvert.DeserializeObject<License>(json);
     }
 
     private byte[] GetDataForSignature()

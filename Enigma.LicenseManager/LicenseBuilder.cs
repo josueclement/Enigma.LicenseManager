@@ -67,7 +67,7 @@ public class LicenseBuilder
         {
             Type = _licenseType,
             Id = _licenseId,
-            CreationDate = _licenseCreationDate,
+            CreationDate = _licenseCreationDate ?? DateTime.UtcNow,
             ExpirationDate = _licenseExpirationDate,
             Recipient = _licenseRecipient
         };

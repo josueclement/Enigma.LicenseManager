@@ -4,5 +4,5 @@ public enum LicenseType
 {
     Unlimited,
     Machine,
-    Software
+    App
 }

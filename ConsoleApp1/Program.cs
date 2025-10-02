@@ -11,11 +11,20 @@ static class Program
 {
     static async Task Main()
     {
-        var privateKeyPath = @"";
-        var privateKeyPassword = "";
-        var publicKeyPath = @"";
-        
         var rsa = new PublicKeyServiceFactory().CreateRsaService();
+
+        // var keyPair = rsa.GenerateKeyPair(4096);
+        // await using var fsPub = new FileStream(@"C:\temp\public.pem", FileMode.Create, FileAccess.Write);
+        // PemUtils.SaveKey(keyPair.Public, fsPub);
+        // await using var fsPri = new FileStream(@"C:\temp\private.pem", FileMode.Create, FileAccess.Write);
+        // PemUtils.SavePrivateKey(keyPair.Private, fsPri, "test1234567890");
+        
+        // var testId = IdGenerator.GenerateAppId();
+        
+        var privateKeyPath = @"C:\temp\private.pem";
+        var privateKeyPassword = "test1234567890";
+        var publicKeyPath = @"C:\temp\public.pem";
+        
         await using var fsPrivateKey = new FileStream(privateKeyPath, FileMode.Open, FileAccess.Read);
         var privateKey = PemUtils.LoadPrivateKey(fsPrivateKey, privateKeyPassword);
         
@@ -24,10 +33,14 @@ static class Program
 
         var license = new LicenseBuilder()
             .SetPrivateKey(privateKey)
-            .SetType(LicenseType.Unlimited)
-            .SetExpirationDate(DateTime.Now.AddDays(-2))
+            .SetType(LicenseType.App)
+            .SetId("ConsoleApp1")
+            .SetExpirationDate(DateTime.UtcNow.AddDays(-2))
             .Build();
+        
+        await license.SaveAsync(@"C:\Temp\license.json");
 
         var isValid = license.IsValid(publicKey);
+        Console.WriteLine(isValid ? "Valid" : "Not valid");
     }
 }
