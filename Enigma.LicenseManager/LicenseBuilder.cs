@@ -8,7 +8,12 @@ namespace Enigma.LicenseManager;
 
 public class LicenseBuilder
 {
-    private License? _license;
+    private LicenseType _licenseType;
+    private string? _licenseId;
+    private DateTime? _licenseCreationDate;
+    private DateTime? _licenseExpirationDate;
+    private string? _licenseRecipient;
+    
     private AsymmetricKeyParameter? _privateKey;
     
     public LicenseBuilder SetPrivateKey(AsymmetricKeyParameter privateKey)
@@ -20,79 +25,55 @@ public class LicenseBuilder
         return this;
     }
 
-    public LicenseBuilder CreateLicense(LicenseType type, string id)
+    public LicenseBuilder SetType(LicenseType type)
     {
-        _license = new License(type, id);
+        _licenseType = type;
+        return this;
+    }
+    
+    public LicenseBuilder SetId(string id)
+    {
+        _licenseId = id;
         return this;
     }
 
     public LicenseBuilder SetCreationDate(DateTime creationDate)
     {
-        if (_license is null)
-            throw new InvalidOperationException("License not created. Call CreateLicense first.");
-        
-        _license.CreationDate = creationDate;
+        _licenseCreationDate = creationDate;
         return this;
     }
 
     public LicenseBuilder SetExpirationDate(DateTime expirationDate)
     {
-        if (_license is null)
-            throw new InvalidOperationException("License not created. Call CreateLicense first.");
-        
-        _license.ExpirationDate = expirationDate;
+        _licenseExpirationDate = expirationDate;
         return this; 
     }
 
     public LicenseBuilder SetRecipient(string recipient)
     {
-        if (_license is null)
-            throw new InvalidOperationException("License not created. Call CreateLicense first.");
-        
-        _license.Recipient = recipient;
+        _licenseRecipient = recipient;
         return this; 
-    }
-
-    private byte[] GenerateDataToSign(License license)
-    {
-        var sb = new StringBuilder();
-        
-        sb.Append("Type: ").Append(license.Type);
-        sb.Append(", Id: ").Append(license.Id);
-
-        if (license.CreationDate is not null)
-            sb.Append(", CreationDate: ").Append(license.CreationDate.Value.ToString("O"));
-
-        if (license.ExpirationDate is not null)
-            sb.Append(", ExpirationDate: ").Append(license.ExpirationDate.Value.ToString("O"));
-
-        if (license.Recipient is not null)
-            sb.Append(", Recipient: ").Append(license.Recipient);
-
-        return sb.ToString().GetUtf8Bytes();
-    }
-
-    private void GenerateMessage()
-    {
-        if (_license is null)
-            throw new InvalidOperationException("License not created. Call CreateLicense first.");
-        
-        if (_privateKey is null)
-            throw new InvalidOperationException("Private key not set. Call SetPrivateKey first.");
-        
-        var rsa = new PublicKeyServiceFactory().CreateRsaService();
-        var data = GenerateDataToSign(_license);
-        _license.Message = rsa.Sign(data, _privateKey); 
     }
 
     public License Build()
     {
-        if (_license is null)
-            throw new InvalidOperationException("License not created. Call CreateLicense first.");
+        if (_privateKey is null)
+            throw new InvalidOperationException("Private key is missing. Call SetPrivateKey() first.");
+
+        if (_licenseType != LicenseType.Unlimited && _licenseId is null)
+            throw new InvalidOperationException($"License id is missing for license type {_licenseType}.");
         
-        GenerateMessage();
-        _privateKey = null;
+        var license = new License
+        {
+            Type = _licenseType,
+            Id = _licenseId,
+            CreationDate = _licenseCreationDate,
+            ExpirationDate = _licenseExpirationDate,
+            Recipient = _licenseRecipient
+        };
         
-        return _license!;
+        license.SignLicense(_privateKey);
+
+        return license;
     }
 }
