@@ -4,7 +4,7 @@ using System;
 
 namespace Enigma.LicenseManager;
 
-public class RsaSignedLicenseBuilder : ILicenseBuilder
+public class LicenseBuilder : ILicenseBuilder
 {
     private string? _id;
     private DateTime? _creationDate;
@@ -15,7 +15,7 @@ public class RsaSignedLicenseBuilder : ILicenseBuilder
     
     private AsymmetricKeyParameter? _privateKey;
     
-    public RsaSignedLicenseBuilder SetPrivateKey(AsymmetricKeyParameter privateKey)
+    public LicenseBuilder SetPrivateKey(AsymmetricKeyParameter privateKey)
     {
         if (!privateKey.IsPrivate)
             throw new ArgumentException("Private key must be private.", nameof(privateKey));

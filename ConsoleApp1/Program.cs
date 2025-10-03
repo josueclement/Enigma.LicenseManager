@@ -21,9 +21,9 @@ static class Program
         
         var testId = IdGenerator.GenerateAppId();
         
-        var privateKeyPath = @"C:\temp\private.pem";
-        var privateKeyPassword = "test1234567890";
-        var publicKeyPath = @"C:\temp\public.pem";
+        // var privateKeyPath = @"C:\temp\private.pem";
+        // var privateKeyPassword = "test1234567890";
+        // var publicKeyPath = @"C:\temp\public.pem";
         
         // await using var fsPrivateKey = new FileStream(privateKeyPath, FileMode.Open, FileAccess.Read);
         // var privateKey = PemUtils.LoadPrivateKey(fsPrivateKey, privateKeyPassword);
@@ -31,13 +31,13 @@ static class Program
         // await using var fsPublicKey = new FileStream(publicKeyPath, FileMode.Open, FileAccess.Read);
         // var publicKey = PemUtils.LoadKey(fsPublicKey);
 
-        var license = new RsaSignedLicenseBuilder()
+        var license = new LicenseBuilder()
             .SetPrivateKey(keyPair.Private)
             .SetProductId("MyAppV1.0")
             .SetExpirationDate(DateTime.UtcNow.AddDays(2))
             .Build();
 
-        await using var fs = new FileStream(@"D:\license.lic", FileMode.Create, FileAccess.Write);
+        await using var fs = new FileStream(@"/home/jo/license.lic", FileMode.Create, FileAccess.Write);
         await license.SaveAsync(fs);
 
         

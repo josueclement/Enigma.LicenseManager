@@ -6,9 +6,9 @@ using Org.BouncyCastle.Crypto;
 
 namespace Enigma.LicenseManager;
 
-public class RsaSignedLicenseService(AsymmetricKeyParameter publicKey) : ILicenseService
+public class LicenseService(AsymmetricKeyParameter publicKey) : ILicenseService
 {
-    private List<License> _licenses;
+    private readonly List<License> _licenses = [];
     
     public License[] LoadedLicenses => _licenses.ToArray();
     
