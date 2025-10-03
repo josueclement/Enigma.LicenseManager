@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Enigma.Cryptography.PublicKey;
 using Org.BouncyCastle.Crypto;
 
@@ -29,13 +30,24 @@ public class LicenseService(AsymmetricKeyParameter publicKey) : ILicenseService
         if (license.ExpirationDate is not null && DateTime.UtcNow > license.ExpirationDate)
             return (false, $"The license has expired. Expiration date: {license.ExpirationDate:O}");
 
-        if (productId != license.ProductId)
+        if (!IsProductIdMatch(license.ProductId, productId))
             return (false, $"Product id mismatch. (License productId: {license.ProductId}, requested productId: {productId})");
         
         if (license.DeviceId is not null && license.DeviceId != deviceId)
             return (false, $"Device id mismatch. (License deviceId: {license.DeviceId}, requested deviceId: {deviceId})");
 
         return (true, null);
+    }
+    
+    private static bool IsProductIdMatch(string licenseProductId, string requestedProductId)
+    {
+        // If no wildcard, use exact match
+        if (!licenseProductId.Contains('*'))
+            return licenseProductId == requestedProductId;
+
+        // Convert wildcard pattern to regex-like matching
+        var pattern = licenseProductId.Replace("*", ".*");
+        return Regex.IsMatch(requestedProductId, $"^{pattern}$");
     }
 
     public void AddLicense(License license)
