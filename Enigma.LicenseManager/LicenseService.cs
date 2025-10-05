@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Enigma.Cryptography.PublicKey;
+using Org.BouncyCastle.Crypto;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Enigma.Cryptography.PublicKey;
-using Org.BouncyCastle.Crypto;
+using System;
 
 namespace Enigma.LicenseManager;
 
-public class LicenseService(AsymmetricKeyParameter publicKey) : ILicenseService
+public class LicenseService(AsymmetricKeyParameter publicKey)
 {
     private readonly List<License> _licenses = [];
     

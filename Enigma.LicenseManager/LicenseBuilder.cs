@@ -4,7 +4,7 @@ using System;
 
 namespace Enigma.LicenseManager;
 
-public class LicenseBuilder : ILicenseBuilder
+public class LicenseBuilder
 {
     private string? _id;
     private DateTime? _creationDate;
@@ -24,37 +24,37 @@ public class LicenseBuilder : ILicenseBuilder
         return this;
     }
     
-    public ILicenseBuilder SetId(string id)
+    public LicenseBuilder SetId(string id)
     {
         _id = id;
         return this;
     }
 
-    public ILicenseBuilder SetCreationDate(DateTime creationDate)
+    public LicenseBuilder SetCreationDate(DateTime creationDate)
     {
         _creationDate = creationDate;
         return this;
     }
 
-    public ILicenseBuilder SetDeviceId(string deviceId)
-    {
-        _deviceId = deviceId;
-        return this;
-    }
-
-    public ILicenseBuilder SetProductId(string productId)
+    public LicenseBuilder SetProductId(string productId)
     {
         _productId = productId;
         return this;
     }
 
-    public ILicenseBuilder SetExpirationDate(DateTime expirationDate)
+    public LicenseBuilder SetDeviceId(string deviceId)
+    {
+        _deviceId = deviceId;
+        return this;
+    }
+
+    public LicenseBuilder SetExpirationDate(DateTime expirationDate)
     {
         _expirationDate = expirationDate;
         return this; 
     }
 
-    public ILicenseBuilder SetOwner(string owner)
+    public LicenseBuilder SetOwner(string owner)
     {
         _owner = owner;
         return this; 
@@ -71,12 +71,15 @@ public class LicenseBuilder : ILicenseBuilder
 
     public License Build()
     {
+        if (_productId is null)
+            throw new InvalidOperationException("Product id is missing. Call SetProductId first.");
+        
         var license = new License
         {
             Id = _id ?? Ulid.NewUlid().ToString(),
             CreationDate = _creationDate ?? DateTime.UtcNow,
-            DeviceId = _deviceId,
             ProductId = _productId,
+            DeviceId = _deviceId,
             ExpirationDate = _expirationDate,
             Owner = _owner
         };

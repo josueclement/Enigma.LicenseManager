@@ -19,7 +19,6 @@ static class Program
         // await using var fsPri = new FileStream(@"C:\temp\private.pem", FileMode.Create, FileAccess.Write);
         // PemUtils.SavePrivateKey(keyPair.Private, fsPri, "test1234567890");
         
-        var testId = IdGenerator.GenerateAppId();
         
         // var privateKeyPath = @"C:\temp\private.pem";
         // var privateKeyPassword = "test1234567890";
@@ -37,7 +36,7 @@ static class Program
             .SetExpirationDate(DateTime.UtcNow.AddDays(2))
             .Build();
 
-        await using var fs = new FileStream(@"/home/jo/license.lic", FileMode.Create, FileAccess.Write);
+        await using var fs = new FileStream(@"D:/license.lic", FileMode.Create, FileAccess.Write);
         await license.SaveAsync(fs);
 
         
