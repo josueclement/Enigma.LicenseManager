@@ -13,7 +13,7 @@ namespace Enigma.LicenseManager;
 /// </summary>
 public class LicenseService
 {
-    private List<(License, AsymmetricKeyParameter)> _licenses = [];
+    private readonly List<(License, AsymmetricKeyParameter)> _licenses = [];
 
     /// <summary>
     /// Adds a license with its corresponding public key to the service for validation.
@@ -110,7 +110,7 @@ public class LicenseService
     /// <returns>True if the product IDs match; otherwise, false.</returns>
     private static bool IsProductIdMatch(string licenseProductId, string requestedProductId)
     {
-        // If no wildcard, use exact match
+        // If no wildcard, use the exact match
         if (!licenseProductId.Contains('*'))
             return licenseProductId == requestedProductId;
 
