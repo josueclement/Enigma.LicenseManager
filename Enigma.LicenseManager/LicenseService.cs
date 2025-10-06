@@ -1,38 +1,38 @@
-﻿using Enigma.Cryptography.PublicKey;
+﻿using Enigma.Cryptography.PQC;
+using Enigma.Cryptography.PublicKey;
 using Org.BouncyCastle.Crypto;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System;
+using System.Collections.Generic;
 
 namespace Enigma.LicenseManager;
 
-/// <summary>
-/// Service for validating and managing licenses using RSA cryptography.
-/// Verifies license signatures, expiration dates, and product/device bindings.
-/// </summary>
-/// <param name="publicKey">The RSA public key used to verify license signatures.</param>
-public class LicenseService(AsymmetricKeyParameter publicKey)
+public class LicenseService
 {
-    /// <summary>
-    /// Internal collection of loaded licenses.
-    /// </summary>
-    private readonly List<License> _licenses = [];
+    private List<(License, AsymmetricKeyParameter)> _licenses = [];
 
-    /// <summary>
-    /// Gets an array of all currently loaded licenses in the service.
-    /// </summary>
-    public License[] LoadedLicenses => _licenses.ToArray();
+    public void AddLicense(License license, AsymmetricKeyParameter publicKey)
+        => _licenses.Add((license, publicKey));
+    
+    public bool HasValidLicense(string productId, string? deviceId = null)
+    {
+        var licenses = _licenses.Where(x => x.Item1.ProductId == productId);
+        foreach (var license in licenses)
+        {
+            var (isValid, _) = IsValid(license.Item1, license.Item2, productId, deviceId);
+            if (isValid)
+                return true;
+        }
 
-    /// <summary>
-    /// Validates a license using RSA signature verification and checks all license constraints.
-    /// Verifies signature authenticity, expiration date, product ID match, and device binding.
-    /// </summary>
-    /// <param name="license">The license to validate.</param>
-    /// <param name="productId">The product identifier to validate against.</param>
-    /// <param name="deviceId">Optional device identifier to validate against (for device-bound licenses).</param>
-    /// <returns>A tuple containing validation result (true/false) and an optional error message.</returns>
-    public (bool isValid, string? message) IsValid(License license, string productId, string? deviceId = null)
+        return false;
+    }
+
+    public (bool isValid, string? message) IsValid(
+        License license,
+        AsymmetricKeyParameter publicKey,
+        string productId,
+        string? deviceId = null)
     {
         if (license.Signature is null)
             return (false, "Invalid license: signature is missing.");
@@ -40,10 +40,13 @@ public class LicenseService(AsymmetricKeyParameter publicKey)
         if (license.ProductId is null)
             return (false, "Invalid license: productId is missing.");
 
-        var rsa = new PublicKeyServiceFactory().CreateRsaService();
+        if (license.SignedWith is null)
+            return (false, "Invalid license: missing signature infos.");
+
+        var signatureVerifier = GetSignatureVerifier(license.SignedWith);
         var data = license.GetDataForSignature();
 
-        if (!rsa.Verify(data, license.Signature, publicKey))
+        if (!signatureVerifier(data, license.Signature, publicKey))
             return (false, "Invalid license: signature is invalid.");
 
         if (license.ExpirationDate is not null && DateTime.UtcNow > license.ExpirationDate)
@@ -58,13 +61,19 @@ public class LicenseService(AsymmetricKeyParameter publicKey)
         return (true, null);
     }
 
-    /// <summary>
-    /// Checks if the license product ID matches the requested product ID.
-    /// Supports wildcard matching using the '*' character in the license product ID.
-    /// </summary>
-    /// <param name="licenseProductId">The product ID from the license (may contain wildcards).</param>
-    /// <param name="requestedProductId">The product ID to validate.</param>
-    /// <returns>True if the product IDs match; otherwise, false.</returns>
+    private Func<byte[], byte[], AsymmetricKeyParameter, bool> GetSignatureVerifier(string signedWith)
+    {
+        switch (signedWith)
+        {
+            case "RSA":
+                return new PublicKeyServiceFactory().CreateRsaService().Verify;
+            case "ML-DSA":
+                return new MLDsaServiceFactory().CreateDsa87Service().Verify;
+            default:
+                throw new InvalidOperationException("Invalid signature type. Supported types: RSA, ML-DSA.");
+        }
+    }
+
     private static bool IsProductIdMatch(string licenseProductId, string requestedProductId)
     {
         // If no wildcard, use exact match
@@ -74,31 +83,5 @@ public class LicenseService(AsymmetricKeyParameter publicKey)
         // Convert wildcard pattern to regex-like matching
         var pattern = licenseProductId.Replace("*", ".*");
         return Regex.IsMatch(requestedProductId, $"^{pattern}$");
-    }
-
-    /// <summary>
-    /// Adds a license to the service's internal collection of loaded licenses.
-    /// </summary>
-    /// <param name="license">The license to add.</param>
-    public void AddLicense(License license)
-        => _licenses.Add(license);
-
-    /// <summary>
-    /// Checks if any of the loaded licenses is valid for the specified product and device.
-    /// </summary>
-    /// <param name="productId">The product identifier to check for.</param>
-    /// <param name="deviceId">Optional device identifier to check for (for device-bound licenses).</param>
-    /// <returns>True if at least one valid license is found; otherwise, false.</returns>
-    public bool HasValidLicense(string productId, string? deviceId = null)
-    {
-        var licenses = _licenses.Where(l => l.ProductId == productId);
-        foreach (var license in licenses)
-        {
-            var (isValid, _) = IsValid(license, productId, deviceId);
-            if (isValid)
-                return true;
-        }
-
-        return false;
     }
 }
