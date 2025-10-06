@@ -8,13 +8,27 @@ using System.Collections.Generic;
 
 namespace Enigma.LicenseManager;
 
+/// <summary>
+/// Service for managing and validating software licenses with cryptographic signature verification.
+/// </summary>
 public class LicenseService
 {
     private List<(License, AsymmetricKeyParameter)> _licenses = [];
 
+    /// <summary>
+    /// Adds a license with its corresponding public key to the service for validation.
+    /// </summary>
+    /// <param name="license">The license to add.</param>
+    /// <param name="publicKey">The public key used to verify the license signature.</param>
     public void AddLicense(License license, AsymmetricKeyParameter publicKey)
         => _licenses.Add((license, publicKey));
     
+    /// <summary>
+    /// Checks if there is a valid license for the specified product and device.
+    /// </summary>
+    /// <param name="productId">The product identifier to check for.</param>
+    /// <param name="deviceId">The optional device identifier to check for. If null, device-specific validation is skipped.</param>
+    /// <returns>True if a valid license is found; otherwise, false.</returns>
     public bool HasValidLicense(string productId, string? deviceId = null)
     {
         var licenses = _licenses.Where(x => x.Item1.ProductId == productId);
@@ -28,6 +42,14 @@ public class LicenseService
         return false;
     }
 
+    /// <summary>
+    /// Validates a license against the specified criteria and verifies its cryptographic signature.
+    /// </summary>
+    /// <param name="license">The license to validate.</param>
+    /// <param name="publicKey">The public key to verify the license signature.</param>
+    /// <param name="productId">The product identifier to validate against.</param>
+    /// <param name="deviceId">The optional device identifier to validate against. If null, device-specific validation is skipped.</param>
+    /// <returns>A tuple containing a boolean indicating if the license is valid and an optional error message.</returns>
     public (bool isValid, string? message) IsValid(
         License license,
         AsymmetricKeyParameter publicKey,
@@ -61,6 +83,12 @@ public class LicenseService
         return (true, null);
     }
 
+    /// <summary>
+    /// Gets the appropriate signature verification function based on the signature algorithm.
+    /// </summary>
+    /// <param name="signedWith">The name of the signature algorithm (e.g., "RSA", "ML-DSA").</param>
+    /// <returns>A function that verifies signatures using the specified algorithm.</returns>
+    /// <exception cref="InvalidOperationException">Thrown when an unsupported signature type is specified.</exception>
     private Func<byte[], byte[], AsymmetricKeyParameter, bool> GetSignatureVerifier(string signedWith)
     {
         switch (signedWith)
@@ -74,6 +102,12 @@ public class LicenseService
         }
     }
 
+    /// <summary>
+    /// Checks if a requested product ID matches the license product ID, supporting wildcard patterns.
+    /// </summary>
+    /// <param name="licenseProductId">The product ID from the license, which may contain wildcard patterns (*).</param>
+    /// <param name="requestedProductId">The product ID to validate.</param>
+    /// <returns>True if the product IDs match; otherwise, false.</returns>
     private static bool IsProductIdMatch(string licenseProductId, string requestedProductId)
     {
         // If no wildcard, use exact match
