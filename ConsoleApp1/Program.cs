@@ -12,12 +12,11 @@ static class Program
 {
     static async Task Main()
     {
-        // OK:
-        // try to sign with private key with RSA and ML-DSA
-        // try to verify product 1.0.2 with license 1.*
-        // try to verify any product with no expiration date
-        // try to verify any product with expiration date in the future
-        // save/load licenses (hash license data before and after)
+        // string basePath = @"C:\Dev\DotNet\Enigma.LicenseManager\UnitTests\Data";
+        // await GenerateRsaKey(basePath, "RSA1");
+        // await GenerateRsaKey(basePath, "RSA2");
+        // await GenerateMlDsaKey(basePath, "MLDSA1");
+        // await GenerateMlDsaKey(basePath, "MLDSA2");
         
         // ERRORS:
         // try to sign with public key with RSA and ML-DSA
@@ -59,5 +58,27 @@ static class Program
         var (isValid, msg) = service.IsValid(license, publicKey, "MyApp 1.1.3-beta22", "myPC");
 
         Console.WriteLine(isValid ? "Valid" : "Not valid");
+    }
+
+    static async Task GenerateRsaKey(string path, string keyName)
+    {
+        var rsa = new PublicKeyServiceFactory().CreateRsaService();
+        var keyPair = rsa.GenerateKeyPair(4096);
+        
+        await using var privateFile = new FileStream(Path.Combine(path, keyName + "_private.pem"), FileMode.Create, FileAccess.Write);
+        PemUtils.SavePrivateKey(keyPair.Private, privateFile, "test1234");
+        await using var publicFile = new FileStream(Path.Combine(path, keyName + "_public.pem"), FileMode.Create, FileAccess.Write);
+        PemUtils.SaveKey(keyPair.Public, publicFile);
+    }
+
+    static async Task GenerateMlDsaKey(string path, string keyName)
+    {
+        var mldsa = new MLDsaServiceFactory().CreateDsa87Service();
+        var keyPair = mldsa.GenerateKeyPair();
+        
+        await using var privateFile = new FileStream(Path.Combine(path, keyName + "_private.pem"), FileMode.Create, FileAccess.Write);
+        PemUtils.SavePrivateKey(keyPair.Private, privateFile, "test1234");
+        await using var publicFile = new FileStream(Path.Combine(path, keyName + "_public.pem"), FileMode.Create, FileAccess.Write);
+        PemUtils.SaveKey(keyPair.Public, publicFile);
     }
 }
