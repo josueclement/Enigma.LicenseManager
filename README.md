@@ -11,10 +11,6 @@
 - **Product Version Matching**: Support for wildcard patterns in product IDs
 - **Expiration Handling**: Built-in support for time-based license expiration
 
-## 🚀 Getting Started
-
----
-
 ## 📝 License Creation
 
 ### Create an RSA-Signed License

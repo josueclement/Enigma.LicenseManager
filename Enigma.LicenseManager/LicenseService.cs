@@ -1,10 +1,10 @@
 ﻿using Enigma.Cryptography.PQC;
 using Enigma.Cryptography.PublicKey;
 using Org.BouncyCastle.Crypto;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System;
-using System.Collections.Generic;
 
 namespace Enigma.LicenseManager;
 

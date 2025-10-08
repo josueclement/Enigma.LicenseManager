@@ -1,7 +1,7 @@
-﻿using Enigma.Cryptography.PublicKey;
+﻿using Enigma.Cryptography.PQC;
+using Enigma.Cryptography.PublicKey;
 using Org.BouncyCastle.Crypto;
 using System;
-using Enigma.Cryptography.PQC;
 
 namespace Enigma.LicenseManager;
 
