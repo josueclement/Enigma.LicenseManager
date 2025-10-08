@@ -45,7 +45,7 @@ static class Program
         var license = await License.LoadAsync(fs);
 
         var service = new LicenseService();
-        var (isValid, msg) = service.IsValid(license, publicKey, "MyApp 1.1.3-beta22", "myPC");
+        var (isValid, msg) = service.IsValid(license!, publicKey, "MyApp 1.1.3-beta22", "myPC");
 
         Console.WriteLine(isValid ? "Valid" : "Not valid");
     }
