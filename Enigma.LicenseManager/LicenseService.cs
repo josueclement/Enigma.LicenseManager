@@ -90,17 +90,12 @@ public class LicenseService
     /// <returns>A function that verifies signatures using the specified algorithm.</returns>
     /// <exception cref="InvalidOperationException">Thrown when an unsupported signature type is specified.</exception>
     private Func<byte[], byte[], AsymmetricKeyParameter, bool> GetSignatureVerifier(string signedWith)
-    {
-        switch (signedWith)
+        => signedWith switch
         {
-            case "RSA":
-                return new PublicKeyServiceFactory().CreateRsaService().Verify;
-            case "ML-DSA":
-                return new MLDsaServiceFactory().CreateDsa87Service().Verify;
-            default:
-                throw new InvalidOperationException("Invalid signature type. Supported types: RSA, ML-DSA.");
-        }
-    }
+            "RSA" => new PublicKeyServiceFactory().CreateRsaService().Verify,
+            "ML-DSA" => new MLDsaServiceFactory().CreateDsa87Service().Verify,
+            _ => throw new InvalidOperationException("Invalid signature type. Supported types: RSA, ML-DSA.")
+        };
 
     /// <summary>
     /// Checks if a requested product ID matches the license product ID, supporting wildcard patterns.
