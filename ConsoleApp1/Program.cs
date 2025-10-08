@@ -18,18 +18,8 @@ static class Program
         // await GenerateMlDsaKey(basePath, "MLDSA1");
         // await GenerateMlDsaKey(basePath, "MLDSA2");
         
-        // ERRORS:
-        // try to sign with public key with RSA and ML-DSA
-        // try to verify product 2.0 with license 1.*
-        // try to verify any product with expiration date in the past
-        // try to verify any product with wrong key
-        // try to verify any product with wrong signature (modified property in license file)
-        
-        
         var rsa = new PublicKeyServiceFactory().CreateRsaService();
         var mldsa = new MLDsaServiceFactory().CreateDsa87Service();
-        
-        
         
         var privateKeyPath = @"D:\MLDSA1_private.pem";
         var privateKeyPassword = "test1234";

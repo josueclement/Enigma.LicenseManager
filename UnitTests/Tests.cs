@@ -185,13 +185,13 @@ public class Tests
     [Fact]
     public async Task TryGenerateRsaLicense_WithMissingMembers()
     {
-        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-        {
-            await using var privateKeyFile = new FileStream("Data/RSA1_private.pem", FileMode.Open, FileAccess.Read);
-            var privateKey = PemUtils.LoadPrivateKey(privateKeyFile, "test1234");
-            await using var publicKeyFile = new FileStream("Data/RSA1_public.pem", FileMode.Open, FileAccess.Read);
-            var publicKey = PemUtils.LoadKey(publicKeyFile);
+        await using var privateKeyFile = new FileStream("Data/RSA1_private.pem", FileMode.Open, FileAccess.Read);
+        var privateKey = PemUtils.LoadPrivateKey(privateKeyFile, "test1234");
+        await using var publicKeyFile = new FileStream("Data/RSA1_public.pem", FileMode.Open, FileAccess.Read);
+        var publicKey = PemUtils.LoadKey(publicKeyFile);
         
+        Assert.Throws<InvalidOperationException>(() =>
+        {
             var license = new LicenseBuilder()
                 .SignWithRsa(privateKey)
                 .Build(); 
@@ -201,16 +201,139 @@ public class Tests
     [Fact]
     public async Task TryGenerateMlDsaLicense_WithMissingMembers()
     {
-        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
-        {
-            await using var privateKeyFile = new FileStream("Data/MLDSA1_private.pem", FileMode.Open, FileAccess.Read);
-            var privateKey = PemUtils.LoadPrivateKey(privateKeyFile, "test1234");
-            await using var publicKeyFile = new FileStream("Data/MLDSA1_public.pem", FileMode.Open, FileAccess.Read);
-            var publicKey = PemUtils.LoadKey(publicKeyFile);
+        await using var privateKeyFile = new FileStream("Data/MLDSA1_private.pem", FileMode.Open, FileAccess.Read);
+        var privateKey = PemUtils.LoadPrivateKey(privateKeyFile, "test1234");
+        await using var publicKeyFile = new FileStream("Data/MLDSA1_public.pem", FileMode.Open, FileAccess.Read);
+        var publicKey = PemUtils.LoadKey(publicKeyFile);
         
+        Assert.Throws<InvalidOperationException>(() =>
+        {
             var license = new LicenseBuilder()
                 .SetProductId("MyApp")
                 .Build();
         });
+    }
+
+    [Fact]
+    public async Task TryValidateLicense_WithBadProductId()
+    {
+        await using var privateKeyFile = new FileStream("Data/RSA1_private.pem", FileMode.Open, FileAccess.Read);
+        var privateKey = PemUtils.LoadPrivateKey(privateKeyFile, "test1234");
+        await using var publicKeyFile = new FileStream("Data/RSA1_public.pem", FileMode.Open, FileAccess.Read);
+        var publicKey = PemUtils.LoadKey(publicKeyFile);
+        
+        var license = new LicenseBuilder()
+            .SetProductId("MyApp 1.1.*")
+            .SetExpirationDate(DateTime.UtcNow.AddDays(1))
+            .SignWithRsa(privateKey)
+            .Build();
+
+        var service = new LicenseService();
+        var (isValid, _) = service.IsValid(license, publicKey, "MyApp 1.2.7");
+        
+        Assert.False(isValid); 
+    }
+
+    [Fact]
+    public async Task TryValidateLicense_WithBadExpirationDate()
+    {
+        await using var privateKeyFile = new FileStream("Data/MLDSA1_private.pem", FileMode.Open, FileAccess.Read);
+        var privateKey = PemUtils.LoadPrivateKey(privateKeyFile, "test1234");
+        await using var publicKeyFile = new FileStream("Data/MLDSA1_public.pem", FileMode.Open, FileAccess.Read);
+        var publicKey = PemUtils.LoadKey(publicKeyFile);
+        
+        var license = new LicenseBuilder()
+            .SetProductId("MyApp")
+            .SetExpirationDate(DateTime.UtcNow.AddMinutes(-1))
+            .SignWithMlDsa(privateKey)
+            .Build();
+
+        var service = new LicenseService();
+        var (isValid, _) = service.IsValid(license, publicKey, "MyApp");
+        
+        Assert.False(isValid); 
+    }
+
+    [Fact]
+    public async Task TryValidateRsaLicense_WithBadKey()
+    {
+        await using var privateKeyFile = new FileStream("Data/RSA1_private.pem", FileMode.Open, FileAccess.Read);
+        var privateKey = PemUtils.LoadPrivateKey(privateKeyFile, "test1234");
+        await using var publicKeyFile = new FileStream("Data/RSA2_public.pem", FileMode.Open, FileAccess.Read);
+        var publicKey = PemUtils.LoadKey(publicKeyFile);
+        
+        var license = new LicenseBuilder()
+            .SetProductId("MyApp")
+            .SignWithRsa(privateKey)
+            .Build();
+
+        var service = new LicenseService();
+        var (isValid, _) = service.IsValid(license, publicKey, "MyApp");
+        
+        Assert.False(isValid); 
+    }
+
+    [Fact]
+    public async Task TryValidateMlDsaLicense_WithBadKey()
+    {
+        await using var privateKeyFile = new FileStream("Data/MLDSA1_private.pem", FileMode.Open, FileAccess.Read);
+        var privateKey = PemUtils.LoadPrivateKey(privateKeyFile, "test1234");
+        await using var publicKeyFile = new FileStream("Data/MLDSA2_public.pem", FileMode.Open, FileAccess.Read);
+        var publicKey = PemUtils.LoadKey(publicKeyFile);
+        
+        var license = new LicenseBuilder()
+            .SetProductId("MyApp")
+            .SignWithMlDsa(privateKey)
+            .Build();
+
+        var service = new LicenseService();
+        var (isValid, _) = service.IsValid(license, publicKey, "MyApp");
+        
+        Assert.False(isValid); 
+    }
+
+    [Fact]
+    public async Task TryValidateRsaLicense_WithBadLicenseData()
+    {
+        await using var privateKeyFile = new FileStream("Data/RSA1_private.pem", FileMode.Open, FileAccess.Read);
+        var privateKey = PemUtils.LoadPrivateKey(privateKeyFile, "test1234");
+        await using var publicKeyFile = new FileStream("Data/RSA2_public.pem", FileMode.Open, FileAccess.Read);
+        var publicKey = PemUtils.LoadKey(publicKeyFile);
+        
+        var license = new LicenseBuilder()
+            .SetProductId("MyApp")
+            .SetExpirationDate(DateTime.UtcNow.AddDays(-1))
+            .SignWithRsa(privateKey)
+            .Build();
+        
+        // Try to change the expiration date -> signature will be invalid
+        license.ExpirationDate = DateTime.UtcNow.AddDays(1);
+
+        var service = new LicenseService();
+        var (isValid, _) = service.IsValid(license, publicKey, "MyApp");
+        
+        Assert.False(isValid); 
+    }
+
+    [Fact]
+    public async Task TryValidateMlDsaLicense_WithBadLicenseData()
+    {
+        await using var privateKeyFile = new FileStream("Data/MLDSA1_private.pem", FileMode.Open, FileAccess.Read);
+        var privateKey = PemUtils.LoadPrivateKey(privateKeyFile, "test1234");
+        await using var publicKeyFile = new FileStream("Data/MLDSA2_public.pem", FileMode.Open, FileAccess.Read);
+        var publicKey = PemUtils.LoadKey(publicKeyFile);
+        
+        var license = new LicenseBuilder()
+            .SetProductId("AnotherApp")
+            .SignWithMlDsa(privateKey)
+            .Build();
+        
+        // Try to change the product id -> signature will be invalid
+        license.ProductId = "MyApp";
+
+        var service = new LicenseService();
+        var (isValid, _) = service.IsValid(license, publicKey, "MyApp");
+        
+        Assert.False(isValid); 
     }
 }
