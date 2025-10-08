@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Enigma.Cryptography.Utils;
+using Enigma.LicenseManager;
 using System.IO;
 using System.Threading.Tasks;
-using Enigma.Cryptography.Utils;
-using Enigma.LicenseManager;
+using System;
 
 namespace UnitTests;
 
@@ -134,8 +134,6 @@ public class Tests
     {
         await using var privateKeyFile = new FileStream("Data/RSA1_private.pem", FileMode.Open, FileAccess.Read);
         var privateKey = PemUtils.LoadPrivateKey(privateKeyFile, "test1234");
-        await using var publicKeyFile = new FileStream("Data/RSA1_public.pem", FileMode.Open, FileAccess.Read);
-        var publicKey = PemUtils.LoadKey(publicKeyFile);
         
         var license = new LicenseBuilder()
             .SetProductId("MyApp 1.*")
@@ -161,8 +159,6 @@ public class Tests
     {
         await using var privateKeyFile = new FileStream("Data/MLDSA1_private.pem", FileMode.Open, FileAccess.Read);
         var privateKey = PemUtils.LoadPrivateKey(privateKeyFile, "test1234");
-        await using var publicKeyFile = new FileStream("Data/MLDSA1_public.pem", FileMode.Open, FileAccess.Read);
-        var publicKey = PemUtils.LoadKey(publicKeyFile);
         
         var license = new LicenseBuilder()
             .SetProductId("MyApp")
@@ -187,12 +183,10 @@ public class Tests
     {
         await using var privateKeyFile = new FileStream("Data/RSA1_private.pem", FileMode.Open, FileAccess.Read);
         var privateKey = PemUtils.LoadPrivateKey(privateKeyFile, "test1234");
-        await using var publicKeyFile = new FileStream("Data/RSA1_public.pem", FileMode.Open, FileAccess.Read);
-        var publicKey = PemUtils.LoadKey(publicKeyFile);
         
         Assert.Throws<InvalidOperationException>(() =>
         {
-            var license = new LicenseBuilder()
+            _ = new LicenseBuilder()
                 .SignWithRsa(privateKey)
                 .Build(); 
         });
@@ -201,17 +195,14 @@ public class Tests
     [Fact]
     public async Task TryGenerateMlDsaLicense_WithMissingMembers()
     {
-        await using var privateKeyFile = new FileStream("Data/MLDSA1_private.pem", FileMode.Open, FileAccess.Read);
-        var privateKey = PemUtils.LoadPrivateKey(privateKeyFile, "test1234");
-        await using var publicKeyFile = new FileStream("Data/MLDSA1_public.pem", FileMode.Open, FileAccess.Read);
-        var publicKey = PemUtils.LoadKey(publicKeyFile);
-        
         Assert.Throws<InvalidOperationException>(() =>
         {
-            var license = new LicenseBuilder()
+            _ = new LicenseBuilder()
                 .SetProductId("MyApp")
                 .Build();
         });
+
+        await Task.CompletedTask;
     }
 
     [Fact]
