@@ -10,6 +10,12 @@ namespace Enigma.LicenseManager;
 /// </summary>
 public class LicenseBuilder
 {
+    private static readonly Func<byte[], AsymmetricKeyParameter, byte[]> RsaSigner =
+        new PublicKeyServiceFactory().CreateRsaService().Sign;
+
+    private static readonly Func<byte[], AsymmetricKeyParameter, byte[]> MlDsaSigner =
+        new MLDsaServiceFactory().CreateDsa87Service().Sign;
+
     private string? _id;
     private DateTime? _creationDate;
     private string? _deviceId;
@@ -99,7 +105,7 @@ public class LicenseBuilder
         
         _privateKey = privateKey;
         _signedWith = "RSA";
-        _signatureGenerator = new PublicKeyServiceFactory().CreateRsaService().Sign;
+        _signatureGenerator = RsaSigner;
         return this;
     }
 
@@ -113,10 +119,10 @@ public class LicenseBuilder
     {
         if (!privateKey.IsPrivate)
             throw new ArgumentException("The provided key must be a private key.", nameof(privateKey));
-        
+
         _privateKey = privateKey;
         _signedWith = "ML-DSA";
-        _signatureGenerator = new MLDsaServiceFactory().CreateDsa87Service().Sign;
+        _signatureGenerator = MlDsaSigner;
         return this;
     }
 

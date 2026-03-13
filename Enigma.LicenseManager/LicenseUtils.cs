@@ -13,7 +13,7 @@ public static class LicenseUtils
     /// </summary>
     /// <returns>A string representing the unique device identifier.</returns>
     public static string GenerateDeviceId()
-        => new DeviceIdBuilder().AddMachineName().AddOsVersion().ToString();
+        => new DeviceIdBuilder().AddMachineName().AddOsVersion().AddMacAddress().ToString();
     
     /// <summary>
     /// Gets the name of the currently executing application.

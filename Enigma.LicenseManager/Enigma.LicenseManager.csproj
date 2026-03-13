@@ -9,7 +9,7 @@
         <Copyright>Copyright © 2025 Josué Clément</Copyright>
         <PackageId>Enigma.LicenseManager</PackageId>
         <Title>Enigma license manager</Title>
-        <Version>1.0.0</Version>
+        <Version>1.1.0</Version>
         <Description>.NET license management library</Description>
         <PackageTags>enigma license open-source</PackageTags>
         <PackageReadmeFile>README.md</PackageReadmeFile>
