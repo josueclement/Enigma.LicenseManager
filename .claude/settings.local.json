@@ -9,7 +9,8 @@
       "Bash(xxd:*)",
       "Bash(for f:*)",
       "Bash(git:*)",
-      "Bash(dotnet:*)"
+      "Bash(dotnet:*)",
+      "Bash(grep:*)"
     ]
   }
 }

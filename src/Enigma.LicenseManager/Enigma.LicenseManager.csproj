@@ -2,9 +2,9 @@
 
     <PropertyGroup>
         <OutputType>Library</OutputType>
-        <TargetFrameworks>netstandard2.0;netstandard2.1;net6.0;net7.0;net8.0;net9.0;net472</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
         <Nullable>enable</Nullable>
-        <LangVersion>13</LangVersion>
+        <LangVersion>14</LangVersion>
         <Authors>Josué Clément</Authors>
         <Copyright>Copyright © 2026 Josué Clément</Copyright>
         <PackageId>Enigma.LicenseManager</PackageId>
@@ -14,11 +14,8 @@
         <PackageTags>enigma;license;licensing;cryptography;rsa;ml-dsa;post-quantum;device-binding;signature;validation</PackageTags>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-        <PackageProjectUrl>https://github.com/josueclement/Enigma.LicenseManager</PackageProjectUrl>
         <RepositoryUrl>https://github.com/josueclement/Enigma.LicenseManager</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <IncludeSymbols>True</IncludeSymbols>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <GenerateDocumentationFile>True</GenerateDocumentationFile>
     </PropertyGroup>
