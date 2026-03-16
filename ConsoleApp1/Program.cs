@@ -1,4 +1,4 @@
-using Enigma.Cryptography.PublicKey;
+﻿using Enigma.Cryptography.PublicKey;
 using Enigma.LicenseManager;
 using System;
 using System.IO;

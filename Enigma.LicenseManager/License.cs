@@ -1,4 +1,4 @@
-using Enigma.Cryptography.Extensions;
+﻿using Enigma.Cryptography.Extensions;
 using Newtonsoft.Json;
 using System.IO;
 using System.Text;

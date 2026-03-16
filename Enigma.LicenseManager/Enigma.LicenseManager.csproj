@@ -8,10 +8,10 @@
         <Authors>Josué Clément</Authors>
         <Copyright>Copyright © 2026 Josué Clément</Copyright>
         <PackageId>Enigma.LicenseManager</PackageId>
-        <Title>Enigma license manager</Title>
+        <Title>Enigma License Manager</Title>
         <Version>1.1.0</Version>
-        <Description>.NET license management library</Description>
-        <PackageTags>enigma license open-source</PackageTags>
+        <Description>Software license management library for .NET with RSA and ML-DSA (post-quantum) signature support, device binding, wildcard product matching, and async persistence.</Description>
+        <PackageTags>enigma;license;licensing;cryptography;rsa;ml-dsa;post-quantum;device-binding;signature;validation</PackageTags>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <PackageProjectUrl>https://github.com/josueclement/Enigma.LicenseManager</PackageProjectUrl>

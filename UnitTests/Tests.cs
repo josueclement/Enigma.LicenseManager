@@ -1,4 +1,4 @@
-using Enigma.Cryptography.Utils;
+﻿using Enigma.Cryptography.Utils;
 using Enigma.LicenseManager;
 using Org.BouncyCastle.Crypto;
 using System.IO;
