@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System;
 
@@ -64,7 +65,7 @@ public class License
         var sb = new StringBuilder();
 
         if (Id is not null)
-            sb.Append(", Id: ").Append(DeviceId);
+            sb.Append(", Id: ").Append(Id);
 
         if (CreationDate is not null)
             sb.Append(", CreationDate: ").Append(CreationDate.Value.ToString("O"));
@@ -80,34 +81,47 @@ public class License
 
         if (Owner is not null)
             sb.Append(", Owner: ").Append(Owner);
-        
+
         if (SignedWith is not null)
             sb.Append(", SignedWith: ").Append(SignedWith);
 
-        return sb.ToString().GetUtf8Bytes(); 
+        return sb.ToString().GetUtf8Bytes();
     }
 
     /// <summary>
     /// Asynchronously saves the license to a stream in JSON format.
     /// </summary>
     /// <param name="output">The stream to write the license data to.</param>
+    /// <param name="cancellationToken">Optional cancellation token.</param>
     /// <returns>A task representing the asynchronous save operation.</returns>
-    public async Task SaveAsync(Stream output)
+    public async Task SaveAsync(Stream output, CancellationToken cancellationToken = default)
     {
         var json = JsonConvert.SerializeObject(this, Formatting.Indented);
-        using var sw = new StreamWriter(output, Encoding.UTF8);
+        using var sw = new StreamWriter(output, Encoding.UTF8, bufferSize: 1024, leaveOpen: true);
+#if NET7_0_OR_GREATER
+        await sw.WriteAsync(json.AsMemory(), cancellationToken);
+#else
+        cancellationToken.ThrowIfCancellationRequested();
         await sw.WriteAsync(json);
+#endif
     }
 
     /// <summary>
     /// Asynchronously loads a license from a stream containing JSON data.
     /// </summary>
     /// <param name="input">The stream to read the license data from.</param>
+    /// <param name="cancellationToken">Optional cancellation token.</param>
     /// <returns>A task representing the asynchronous load operation, containing the deserialized license or null if deserialization fails.</returns>
-    public static async Task<License?> LoadAsync(Stream input)
+    public static async Task<License?> LoadAsync(Stream input, CancellationToken cancellationToken = default)
     {
-        using var sr = new StreamReader(input, Encoding.UTF8);
+        using var sr = new StreamReader(input, Encoding.UTF8, detectEncodingFromByteOrderMarks: true,
+            bufferSize: 1024, leaveOpen: true);
+#if NET7_0_OR_GREATER
+        var json = await sr.ReadToEndAsync(cancellationToken);
+#else
+        cancellationToken.ThrowIfCancellationRequested();
         var json = await sr.ReadToEndAsync();
+#endif
         return JsonConvert.DeserializeObject<License>(json);
     }
 }

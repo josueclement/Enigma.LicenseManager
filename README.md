@@ -6,7 +6,7 @@
 
 - **Dual Cryptographic Support**: Choose between RSA and ML-DSA (post-quantum) signatures
 - **Flexible License Management**: Create, validate, and manage licenses with customizable properties
-- **Cross-Platform Compatibility**: Supports .NET Standard 2.0, 2.1, and .NET 9.0
+- **Cross-Platform Compatibility**: Supports .NET Standard 2.0+, .NET 6.0+, and .NET Framework 4.7.2
 - **JSON Serialization**: Easy license storage and distribution in JSON format
 - **Product Version Matching**: Support for wildcard patterns in product IDs
 - **Expiration Handling**: Built-in support for time-based license expiration

@@ -14,6 +14,13 @@ namespace Enigma.LicenseManager;
 public class LicenseService
 {
     private readonly List<(License, AsymmetricKeyParameter)> _licenses = [];
+    private readonly object _lock = new();
+
+    private static readonly Func<byte[], byte[], AsymmetricKeyParameter, bool> RsaVerifier =
+        new PublicKeyServiceFactory().CreateRsaService().Verify;
+
+    private static readonly Func<byte[], byte[], AsymmetricKeyParameter, bool> MlDsaVerifier =
+        new MLDsaServiceFactory().CreateDsa87Service().Verify;
 
     /// <summary>
     /// Adds a license with its corresponding public key to the service for validation.
@@ -21,8 +28,30 @@ public class LicenseService
     /// <param name="license">The license to add.</param>
     /// <param name="publicKey">The public key used to verify the license signature.</param>
     public void AddLicense(License license, AsymmetricKeyParameter publicKey)
-        => _licenses.Add((license, publicKey));
-    
+    {
+        lock (_lock)
+        {
+            _licenses.Add((license, publicKey));
+        }
+    }
+
+    /// <summary>
+    /// Removes a license from the service by reference equality.
+    /// </summary>
+    /// <param name="license">The license to remove.</param>
+    /// <returns>True if the license was found and removed; otherwise, false.</returns>
+    public bool RemoveLicense(License license)
+    {
+        lock (_lock)
+        {
+            var index = _licenses.FindIndex(x => ReferenceEquals(x.Item1, license));
+            if (index < 0)
+                return false;
+            _licenses.RemoveAt(index);
+            return true;
+        }
+    }
+
     /// <summary>
     /// Checks if there is a valid license for the specified product and device.
     /// </summary>
@@ -31,8 +60,15 @@ public class LicenseService
     /// <returns>True if a valid license is found; otherwise, false.</returns>
     public bool HasValidLicense(string productId, string? deviceId = null)
     {
-        var licenses = _licenses.Where(x => x.Item1.ProductId == productId);
-        foreach (var license in licenses)
+        List<(License, AsymmetricKeyParameter)> snapshot;
+        lock (_lock)
+        {
+            snapshot = _licenses
+                .Where(x => x.Item1.ProductId != null && IsProductIdMatch(x.Item1.ProductId, productId))
+                .ToList();
+        }
+
+        foreach (var license in snapshot)
         {
             var (isValid, _) = IsValid(license.Item1, license.Item2, productId, deviceId);
             if (isValid)
@@ -89,11 +125,11 @@ public class LicenseService
     /// <param name="signedWith">The name of the signature algorithm (e.g., "RSA", "ML-DSA").</param>
     /// <returns>A function that verifies signatures using the specified algorithm.</returns>
     /// <exception cref="InvalidOperationException">Thrown when an unsupported signature type is specified.</exception>
-    private Func<byte[], byte[], AsymmetricKeyParameter, bool> GetSignatureVerifier(string signedWith)
+    private static Func<byte[], byte[], AsymmetricKeyParameter, bool> GetSignatureVerifier(string signedWith)
         => signedWith switch
         {
-            "RSA" => new PublicKeyServiceFactory().CreateRsaService().Verify,
-            "ML-DSA" => new MLDsaServiceFactory().CreateDsa87Service().Verify,
+            "RSA" => RsaVerifier,
+            "ML-DSA" => MlDsaVerifier,
             _ => throw new InvalidOperationException("Invalid signature type. Supported types: RSA, ML-DSA.")
         };
 
@@ -109,8 +145,8 @@ public class LicenseService
         if (!licenseProductId.Contains('*'))
             return licenseProductId == requestedProductId;
 
-        // Convert wildcard pattern to regex-like matching
-        var pattern = licenseProductId.Replace("*", ".*");
-        return Regex.IsMatch(requestedProductId, $"^{pattern}$");
+        // Escape regex metacharacters, then convert wildcard back to regex pattern
+        var pattern = "^" + Regex.Escape(licenseProductId).Replace("\\*", ".*") + "$";
+        return Regex.IsMatch(requestedProductId, pattern);
     }
 }
