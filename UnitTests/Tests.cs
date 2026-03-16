@@ -2,6 +2,7 @@ using Enigma.Cryptography.Utils;
 using Enigma.LicenseManager;
 using Org.BouncyCastle.Crypto;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System;
 
@@ -418,5 +419,146 @@ public class Tests : IClassFixture<KeyFixture>
     {
         var ex = Record.Exception(() => LicenseUtils.GetExecutingAppVersion());
         Assert.Null(ex);
+    }
+
+    // RemoveLicense tests
+
+    [Fact]
+    public void RemoveLicense_ExistingLicense_ReturnsTrue()
+    {
+        var license = new LicenseBuilder()
+            .SetProductId("MyApp")
+            .SignWithRsa(_keys.Rsa1PrivateKey)
+            .Build();
+
+        var service = new LicenseService();
+        service.AddLicense(license, _keys.Rsa1PublicKey);
+
+        Assert.True(service.RemoveLicense(license));
+    }
+
+    [Fact]
+    public void RemoveLicense_NonExistentLicense_ReturnsFalse()
+    {
+        var license = new LicenseBuilder()
+            .SetProductId("MyApp")
+            .SignWithRsa(_keys.Rsa1PrivateKey)
+            .Build();
+
+        var service = new LicenseService();
+
+        Assert.False(service.RemoveLicense(license));
+    }
+
+    [Fact]
+    public void RemoveLicense_LicenseNoLongerValid()
+    {
+        var license = new LicenseBuilder()
+            .SetProductId("MyApp")
+            .SignWithRsa(_keys.Rsa1PrivateKey)
+            .Build();
+
+        var service = new LicenseService();
+        service.AddLicense(license, _keys.Rsa1PublicKey);
+
+        Assert.True(service.HasValidLicense("MyApp"));
+
+        service.RemoveLicense(license);
+
+        Assert.False(service.HasValidLicense("MyApp"));
+    }
+
+    [Fact]
+    public void RemoveLicense_UsesReferenceEquality()
+    {
+        var license1 = new LicenseBuilder()
+            .SetId("same-id")
+            .SetProductId("MyApp")
+            .SetCreationDate(DateTime.UtcNow)
+            .SignWithRsa(_keys.Rsa1PrivateKey)
+            .Build();
+
+        var license2 = new LicenseBuilder()
+            .SetId("same-id")
+            .SetProductId("MyApp")
+            .SetCreationDate(license1.CreationDate!.Value)
+            .SignWithRsa(_keys.Rsa1PrivateKey)
+            .Build();
+
+        var service = new LicenseService();
+        service.AddLicense(license1, _keys.Rsa1PublicKey);
+
+        Assert.False(service.RemoveLicense(license2));
+    }
+
+    // Save/load round-trip with full validation
+
+    [Fact]
+    public async Task SaveLoadRsaLicense_ThenValidate()
+    {
+        var license = new LicenseBuilder()
+            .SetProductId("MyApp 1.*")
+            .SetExpirationDate(DateTime.UtcNow.AddDays(1))
+            .SignWithRsa(_keys.Rsa1PrivateKey)
+            .Build();
+
+        var ms = new MemoryStream();
+        await license.SaveAsync(ms);
+
+        var ms2 = new MemoryStream(ms.ToArray());
+        var loaded = await License.LoadAsync(ms2);
+
+        Assert.NotNull(loaded);
+
+        var service = new LicenseService();
+        var (isValid, message) = service.IsValid(loaded, _keys.Rsa1PublicKey, "MyApp 1.2.3");
+
+        Assert.True(isValid, message);
+    }
+
+    [Fact]
+    public async Task SaveLoadMlDsaLicense_ThenValidate()
+    {
+        var license = new LicenseBuilder()
+            .SetProductId("MyApp")
+            .SignWithMlDsa(_keys.MlDsa1PrivateKey)
+            .Build();
+
+        var ms = new MemoryStream();
+        await license.SaveAsync(ms);
+
+        var ms2 = new MemoryStream(ms.ToArray());
+        var loaded = await License.LoadAsync(ms2);
+
+        Assert.NotNull(loaded);
+
+        var service = new LicenseService();
+        var (isValid, message) = service.IsValid(loaded, _keys.MlDsa1PublicKey, "MyApp");
+
+        Assert.True(isValid, message);
+    }
+
+    // Public key rejection tests
+
+    [Fact]
+    public void SignWithRsa_PublicKey_ThrowsArgumentException()
+    {
+        Assert.Throws<ArgumentException>(() =>
+        {
+            new LicenseBuilder()
+                .SetProductId("MyApp")
+                .SignWithRsa(_keys.Rsa1PublicKey);
+        });
+    }
+
+    [Fact]
+    public void SignWithMlDsa_PublicKey_ThrowsArgumentException()
+    {
+        Assert.Throws<ArgumentException>(() =>
+        {
+            new LicenseBuilder()
+                .SetProductId("MyApp")
+                .SignWithMlDsa(_keys.MlDsa1PublicKey);
+        });
     }
 }

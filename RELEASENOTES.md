@@ -3,7 +3,7 @@
 ## Breaking Changes
 
 - **Fix `GetDataForSignature()` copy-paste bug (#1):** The `Id` field was incorrectly serialized as `DeviceId` in the signature data. Licenses signed with v1.0.0 will fail verification in v1.1.0. Re-sign existing licenses after upgrading.
-- **Strengthen device ID generation (#14):** `GenerateDeviceId()` now includes the MAC address in the device fingerprint. Device IDs generated with v1.0.0 will differ from v1.1.0. Update any device-bound licenses accordingly.
+- **Device ID generation unchanged from v1.0.0:** MAC address was considered but excluded from `GenerateDeviceId()` because removable network adapters (WiFi dongles, USB adapters) cause instability. Device IDs remain based on machine name and OS version.
 
 ## Bug Fixes
 
