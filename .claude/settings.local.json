@@ -7,7 +7,9 @@
       "Bash(which dotnet:*)",
       "Bash(file:*)",
       "Bash(xxd:*)",
-      "Bash(for f:*)"
+      "Bash(for f:*)",
+      "Bash(git:*)",
+      "Bash(dotnet:*)"
     ]
   }
 }
