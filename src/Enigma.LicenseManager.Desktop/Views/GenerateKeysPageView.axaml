@@ -1,0 +1,14 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Enigma.LicenseManager.Desktop.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="450"
+             x:Class="Enigma.LicenseManager.Desktop.Views.GenerateKeysPageView"
+             x:DataType="vm:GenerateKeysPageViewModel">
+    <StackPanel Margin="24" Spacing="8">
+        <TextBlock Text="{Binding Title}" FontSize="24" FontWeight="SemiBold" />
+        <TextBlock Text="This page will be implemented in PHASE03."
+                   Foreground="{DynamicResource CarbonForegroundSecondaryBrush}" />
+    </StackPanel>
+</UserControl>

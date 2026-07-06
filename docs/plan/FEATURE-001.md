@@ -123,7 +123,7 @@ Add the Tools project to `Enigma.LicenseManager.slnx`.
 
 ## PHASE02 — Desktop app shell & infrastructure
 
-**Status:** TODO · Branch (at build): `feature/feature-001-phase02-desktop-shell`
+**Status:** DONE · Branch (at build): `feature/feature-001-phase02-desktop-shell`
 
 New project `src/Enigma.LicenseManager.Desktop/`: `net10.0`, `WinExe`, Avalonia **12.0.5**,
 compiled bindings on. Packages mirror Enigma.UI minus cert/encrypt/ML-KEM: Avalonia (+ Desktop,
