@@ -2,6 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/ConsoleApp1/ConsoleApp1.csproj" />
     <Project Path="src/Enigma.LicenseManager/Enigma.LicenseManager.csproj" />
+    <Project Path="src/Enigma.LicenseManager.Tools/Enigma.LicenseManager.Tools.csproj" />
     <Project Path="src/UnitTests/UnitTests.csproj" />
   </Folder>
 </Solution>
