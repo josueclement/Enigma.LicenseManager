@@ -32,6 +32,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Enigma.LicenseManager\Enigma.LicenseManager.csproj" />
       <ProjectReference Include="..\Enigma.LicenseManager.Tools\Enigma.LicenseManager.Tools.csproj" />
+      <ProjectReference Include="..\Enigma.LicenseManager.Cli\Enigma.LicenseManager.Cli.csproj" />
     </ItemGroup>
 
     <ItemGroup>

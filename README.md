@@ -168,5 +168,5 @@ The GUI's key/license operations are backed by the shared **`Enigma.LicenseManag
 | `src/Enigma.LicenseManager/` | Core library |
 | `src/Enigma.LicenseManager.Tools/` | Shared key / license operations (used by the desktop app) |
 | `src/Enigma.LicenseManager.Desktop/` | Avalonia desktop application |
+| `src/Enigma.LicenseManager.Cli/` | Command-line tool (`enigma-license`) |
 | `src/UnitTests/` | Unit tests |
-| `src/ConsoleApp1/` | Example console application |

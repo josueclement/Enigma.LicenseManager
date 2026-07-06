@@ -1,6 +1,6 @@
 # FEATURE-002 — License-management CLI tool (`Enigma.LicenseManager.Cli`)
 
-**Status:** TODO · **Type:** FEATURE (single-phase) · **Planned now, built later.**
+**Status:** DONE · **Type:** FEATURE (single-phase) · **Planned now, built later.**
 
 ## Objective
 
