@@ -143,10 +143,30 @@ if (service.HasValidLicense("MyApp 1.0", deviceId))
 service.RemoveLicense(license);
 ```
 
+## Tooling
+
+### Desktop app
+
+**Enigma License Manager** is an [Avalonia](https://avaloniaui.net/) desktop application (`src/Enigma.LicenseManager.Desktop/`) for working with keys and licenses through a GUI, without writing code. It provides three pages:
+
+- **Generate Keys** — generate an RSA (2048/3072/4096/8192) or ML-DSA (level 87) key pair and save the public / private keys to PEM, optionally encrypting the private key with a password.
+- **Generate Licenses** — build and sign a license (product ID, owner, optional device binding and expiration) with an RSA or ML-DSA private key, and save it as JSON.
+- **Validate Licenses** — validate a license file against a public key, optionally constraining the product ID and device ID.
+
+A runtime light / dark theme toggle is persisted per user. Run it with:
+
+```bash
+dotnet run --project src/Enigma.LicenseManager.Desktop
+```
+
+The GUI's key/license operations are backed by the shared **`Enigma.LicenseManager.Tools`** library (`src/Enigma.LicenseManager.Tools/`), which wraps the core library's signing/verification with key generation, PEM I/O, and RSA-vs-ML-DSA dispatch behind DI-registered services (`AddLicenseTools()`).
+
 ## Project Structure
 
 | Path | Description |
 |------|-------------|
 | `src/Enigma.LicenseManager/` | Core library |
+| `src/Enigma.LicenseManager.Tools/` | Shared key / license operations (used by the desktop app) |
+| `src/Enigma.LicenseManager.Desktop/` | Avalonia desktop application |
 | `src/UnitTests/` | Unit tests |
 | `src/ConsoleApp1/` | Example console application |

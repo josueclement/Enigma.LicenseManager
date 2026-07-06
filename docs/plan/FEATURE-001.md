@@ -1,6 +1,6 @@
 # FEATURE-001 — License-management desktop app (Avalonia) + shared Tools library
 
-**Status:** IN PROGRESS · **Type:** multi-phase FEATURE
+**Status:** DONE · **Type:** multi-phase FEATURE
 
 ## Objective
 
@@ -164,7 +164,7 @@ Add the Desktop project to `Enigma.LicenseManager.slnx`.
 
 ## PHASE03 — Feature pages
 
-**Status:** TODO · Branch (at build): `feature/feature-001-phase03-feature-pages`
+**Status:** DONE · Branch (at build): `feature/feature-001-phase03-feature-pages`
 
 Three View/VM pairs mirroring Enigma.UI's form layout (`ScrollViewer > StackPanel(Margin=24,
 Spacing=16, MaxWidth=800)` → `carbon:SettingsCardExpander` sections → `editors:TextEditor` /

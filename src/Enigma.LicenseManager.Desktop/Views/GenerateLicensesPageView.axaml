@@ -1,14 +1,104 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:Enigma.LicenseManager.Desktop.ViewModels"
+             xmlns:carbon="using:Carbon.Avalonia.Desktop.Controls"
+             xmlns:editors="using:Carbon.Avalonia.Desktop.Controls.Editors"
+             xmlns:helpers="using:Enigma.LicenseManager.Desktop.Helpers"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="900"
              x:Class="Enigma.LicenseManager.Desktop.Views.GenerateLicensesPageView"
              x:DataType="vm:GenerateLicensesPageViewModel">
-    <StackPanel Margin="24" Spacing="8">
-        <TextBlock Text="{Binding Title}" FontSize="24" FontWeight="SemiBold" />
-        <TextBlock Text="This page will be implemented in PHASE03."
-                   Foreground="{DynamicResource CarbonForegroundSecondaryBrush}" />
+
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="16" MaxWidth="800" HorizontalAlignment="Stretch">
+      <TextBlock Text="Generate Licenses"
+                 FontSize="24"
+                 FontWeight="SemiBold" />
+      <TextBlock Text="Generate software licenses with RSA or ML-DSA signatures."
+                 Opacity="0.7" TextWrapping="Wrap" />
+
+      <!-- License Details -->
+      <carbon:SettingsCardExpander Header="License Details"
+                                  Description="Configure the license metadata"
+                                  IsExpanded="True">
+        <StackPanel Spacing="12">
+          <editors:TextEditor Title="Product ID"
+                              Text="{Binding ProductId}"
+                              PlaceholderText="Enter product identifier"
+                              HasValidationError="{Binding ProductIdHasError}"
+                              ValidationErrorMessage="Required" />
+          <editors:TextEditor Title="Owner"
+                              Text="{Binding Owner}"
+                              PlaceholderText="Enter license owner"
+                              HasValidationError="{Binding OwnerHasError}"
+                              ValidationErrorMessage="Required" />
+          <editors:TextEditor Title="Device ID"
+                              Text="{Binding DeviceId}"
+                              PlaceholderText="Enter device identifier (optional)" />
+          <StackPanel Orientation="Horizontal" Spacing="12">
+            <CheckBox Content="Set Expiration Date"
+                      IsChecked="{Binding HasExpiration}" />
+            <CalendarDatePicker SelectedDate="{Binding ExpirationDate}"
+                                IsVisible="{Binding HasExpiration}"
+                                PlaceholderText="Select date" />
+          </StackPanel>
+        </StackPanel>
+      </carbon:SettingsCardExpander>
+
+      <!-- Signing Configuration -->
+      <carbon:SettingsCardExpander Header="Signing Configuration"
+                                  Description="Select the signing algorithm and private key"
+                                  IsExpanded="True">
+        <StackPanel Spacing="12">
+          <TextBlock Text="Signing Algorithm" FontWeight="SemiBold" />
+          <ComboBox ItemsSource="{Binding SigningAlgorithmOptions}"
+                    SelectedIndex="{Binding SelectedSigningAlgorithmIndex}"
+                    HorizontalAlignment="Stretch" />
+          <editors:TextEditor Title="Private Key File"
+                              Text="{Binding SigningKeyPath}"
+                              PlaceholderText="Select signing key..."
+                              helpers:FileDropHelper.IsEnabled="True"
+                              HasValidationError="{Binding SigningKeyHasError}"
+                              ValidationErrorMessage="Required">
+            <editors:TextEditor.ActionContent>
+              <Button Content="Browse..."
+                      Command="{Binding BrowseSigningKeyCommand}"
+                      Classes="borderless"
+                      Padding="4,2" />
+            </editors:TextEditor.ActionContent>
+          </editors:TextEditor>
+          <editors:TextEditor Title="Key Password"
+                              Text="{Binding SigningKeyPassword}"
+                              PasswordChar="&#x2022;"
+                              PlaceholderText="Password for encrypted key (optional)" />
+        </StackPanel>
+      </carbon:SettingsCardExpander>
+
+      <!-- Output -->
+      <carbon:SettingsCardExpander Header="Output"
+                                  Description="Select where to save the license file"
+                                  IsExpanded="True">
+        <editors:TextEditor Title="License File"
+                            Text="{Binding LicenseOutputPath}"
+                            PlaceholderText="Select license output path..."
+                            helpers:FileDropHelper.IsEnabled="True"
+                            HasValidationError="{Binding OutputPathHasError}"
+                            ValidationErrorMessage="Required">
+          <editors:TextEditor.ActionContent>
+            <Button Content="Browse..."
+                    Command="{Binding BrowseLicenseOutputCommand}"
+                    Classes="borderless"
+                    Padding="4,2" />
+          </editors:TextEditor.ActionContent>
+        </editors:TextEditor>
+      </carbon:SettingsCardExpander>
+
+      <!-- Generate Button -->
+      <Button Content="Generate License"
+              Command="{Binding GenerateLicenseCommand}"
+              HorizontalAlignment="Right"
+              Classes="accent" />
     </StackPanel>
+  </ScrollViewer>
 </UserControl>
