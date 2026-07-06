@@ -161,6 +161,100 @@ dotnet run --project src/Enigma.LicenseManager.Desktop
 
 The GUI's key/license operations are backed by the shared **`Enigma.LicenseManager.Tools`** library (`src/Enigma.LicenseManager.Tools/`), which wraps the core library's signing/verification with key generation, PEM I/O, and RSA-vs-ML-DSA dispatch behind DI-registered services (`AddLicenseTools()`).
 
+### Command-line tool
+
+**`enigma-license`** (`src/Enigma.LicenseManager.Cli/`) runs the same key and license operations as the desktop app from a terminal or CI pipeline. Run it with:
+
+```bash
+dotnet run --project src/Enigma.LicenseManager.Cli -- <command>
+```
+
+The examples below use `enigma-license` as shorthand for `dotnet run --project src/Enigma.LicenseManager.Cli --`.
+
+Full round-trip — generate a key pair, sign a license, validate it:
+
+```bash
+mkdir -p keys
+
+# 1. Generate an RSA key pair (private key encrypted with a password)
+enigma-license keygen --algorithm rsa --rsa-size 3072 \
+  --public keys/public.pem --private keys/private.pem --password s3cret
+
+# 2. Sign a license with the private key
+enigma-license license generate --product-id "MyApp 1.*" --owner "Acme Corp" \
+  --expires 2027-01-31 --algorithm rsa --key keys/private.pem --password s3cret \
+  --out app.license.json
+
+# 3. Validate it with the public key
+enigma-license license validate --license app.license.json \
+  --public-key keys/public.pem --product-id "MyApp 1.2.3"
+# License is VALID.
+```
+
+`keygen` writes to the paths you give it and does not create parent directories, so create the output directory first (`mkdir -p keys`) or use paths in the current directory.
+
+#### Generate keys
+
+```bash
+mkdir -p keys
+
+# RSA key pair (--rsa-size is one of 2048/3072/4096/8192, default 3072; RSA only)
+enigma-license keygen --algorithm rsa --rsa-size 4096 \
+  --public keys/public.pem --private keys/private.pem
+
+# ML-DSA key pair (post-quantum, fixed to level 87)
+enigma-license keygen --algorithm ml-dsa \
+  --public keys/public.pem --private keys/private.pem
+
+# Encrypt the private key with a password
+enigma-license keygen --algorithm rsa \
+  --public keys/public.pem --private keys/private.pem --password s3cret
+```
+
+#### Generate a license
+
+```bash
+enigma-license license generate \
+  --product-id "MyApp 1.*" \
+  --owner "Acme Corp" \
+  --device-id "abc123" \
+  --expires 2027-01-31 \
+  --algorithm rsa --key keys/private.pem --password s3cret \
+  --out app.license.json
+```
+
+`--owner`, `--device-id` and `--expires` are optional; omitting `--expires` means the license never expires. `--algorithm` must match the private key. Drop `--password` for an unencrypted key.
+
+#### Validate a license
+
+```bash
+# Valid — product and device match → exit 0
+enigma-license license validate \
+  --license app.license.json --public-key keys/public.pem \
+  --product-id "MyApp 1.2.3" --device-id "abc123"
+# License is VALID.
+
+# Invalid — product id mismatch → exit 1
+enigma-license license validate \
+  --license app.license.json --public-key keys/public.pem \
+  --product-id "OtherApp 1.0"
+# License is INVALID: Product id mismatch. (License productId: MyApp 1.*, requested productId: OtherApp 1.0)
+```
+
+`--product-id` and `--device-id` are optional; omit `--product-id` to validate against the license's own product id. A wrong public key or a device-id mismatch is also reported as invalid (exit 1).
+
+#### Exit codes
+
+| Code | Meaning |
+|------|---------|
+| `0` | Success / license valid |
+| `1` | License invalid |
+| `2` | Operation error (bad password, missing file — message on stderr) |
+
+Exit codes make the tool scriptable in CI: `enigma-license license validate ... && ./deploy.sh`.
+
+Every command supports `--help`; `enigma-license --version` prints the tool version.
+
 ## Project Structure
 
 | Path | Description |

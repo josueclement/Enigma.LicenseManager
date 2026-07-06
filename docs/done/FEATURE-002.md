@@ -39,7 +39,7 @@ missing/unreadable file — reported on stderr).
 **Modified**
 - `Enigma.LicenseManager.slnx` — added the CLI project, removed the `ConsoleApp1` entry.
 - `src/UnitTests/UnitTests.csproj` — added ProjectReference to the CLI project.
-- `README.md` — Project Structure table: replaced the `src/ConsoleApp1/` row with `src/Enigma.LicenseManager.Cli/`.
+- `README.md` — Project Structure table: replaced the `src/ConsoleApp1/` row with `src/Enigma.LicenseManager.Cli/`; added a **"### Command-line tool"** examples subsection under `## Tooling` (run-from-source note + `enigma-license` shorthand, end-to-end round-trip, per-command examples for keygen/generate/validate, an exit-codes table, and a CI note). Every example command was executed against the built CLI and confirmed to behave as documented.
 - `docs/roadmap.md`, `docs/plan/FEATURE-002.md` — status → `IN PROGRESS` → `DONE`.
 
 **Deleted**
