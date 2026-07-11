@@ -1,0 +1,21 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Enigma.LicenseManager.Desktop.App"
+             xmlns:local="using:Enigma.LicenseManager.Desktop">
+
+    <Application.DataTemplates>
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <FluentTheme />
+    </Application.Styles>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://Carbon.Avalonia.Desktop/Themes/Fluent.axaml" />
+                <ResourceInclude Source="/Controls/ProgressOverlayCard.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
