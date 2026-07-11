@@ -12,6 +12,6 @@ Single registry of every tracked work item. Status vocabulary: `TODO`, `IN PROGR
 | FEATURE-003 | Upgrade Enigma.Cryptography to 5.0.0 + Central Package Management | DONE | docs/plan/FEATURE-003.md |
 | FEATURE-004 | Prepare 1.2.0 release (build-config, deps, xUnit v3, docs) | IN PROGRESS | docs/plan/FEATURE-004.md |
 | - PHASE01   | Build-settings consolidation (`Directory.Build.props` + `.editorconfig`) | DONE | (in FEATURE-004.md) |
-| - PHASE02   | `Directory.Packages.props` overhaul + non-Avalonia dependency refresh | TODO | (in FEATURE-004.md) |
+| - PHASE02   | `Directory.Packages.props` overhaul + non-Avalonia dependency refresh | DONE | (in FEATURE-004.md) |
 | - PHASE03   | xUnit v2 → v3 migration                            | TODO   | (in FEATURE-004.md)      |
 | - PHASE04   | Production-readiness docs + release checklist      | TODO   | (in FEATURE-004.md)      |

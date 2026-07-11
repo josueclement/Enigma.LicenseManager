@@ -59,7 +59,7 @@ xUnit v2→v3 test migration, and a documentation sweep + release checklist.
 
 ## PHASE02 — `Directory.Packages.props` overhaul
 
-**Status:** TODO · Suggested branch: `feature/feature-004-phase02-packages`
+**Status:** DONE · Suggested branch: `feature/feature-004-phase02-packages`
 
 - Reorganize the single flat `ItemGroup` into commented category groups, keeping the leading
   `ManagePackageVersionsCentrally` PropertyGroup:
