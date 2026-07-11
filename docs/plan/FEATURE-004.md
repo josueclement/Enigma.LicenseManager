@@ -83,7 +83,7 @@ xUnit v2→v3 test migration, and a documentation sweep + release checklist.
 
 ## PHASE03 — xUnit v3 migration
 
-**Status:** TODO · Suggested branch: `feature/feature-004-phase03-xunit-v3`
+**Status:** DONE · Suggested branch: `feature/feature-004-phase03-xunit-v3`
 
 - Rewrite `src/UnitTests/UnitTests.csproj` to mirror `../Enigma.Cryptography/src/UnitTests/UnitTests.csproj`:
   `OutputType=Exe`, `TestingPlatformDotnetTestSupport=true`; references `Microsoft.NET.Test.Sdk` + `xunit.v3` +

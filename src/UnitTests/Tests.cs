@@ -17,7 +17,7 @@ public class KeyFixture : IAsyncLifetime
     public AsymmetricKeyParameter Rsa2PublicKey { get; private set; } = null!;
     public AsymmetricKeyParameter MlDsa2PublicKey { get; private set; } = null!;
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         await using var rsa1Priv = new FileStream("Data/RSA1_private.pem", FileMode.Open, FileAccess.Read);
         Rsa1PrivateKey = PemUtils.LoadPrivateKey(rsa1Priv, "test1234");
@@ -38,7 +38,7 @@ public class KeyFixture : IAsyncLifetime
         MlDsa2PublicKey = PemUtils.LoadKey(mldsa2Pub);
     }
 
-    public Task DisposeAsync() => Task.CompletedTask;
+    public ValueTask DisposeAsync() => ValueTask.CompletedTask;
 }
 
 public class Tests : IClassFixture<KeyFixture>
@@ -153,11 +153,11 @@ public class Tests : IClassFixture<KeyFixture>
         var originalLicenseData = license.GetDataForSignature();
 
         var ms = new MemoryStream();
-        await license.SaveAsync(ms);
+        await license.SaveAsync(ms, TestContext.Current.CancellationToken);
         var serializedLicenseData = ms.ToArray();
 
         var ms2 = new MemoryStream(serializedLicenseData);
-        var license2 = await License.LoadAsync(ms2);
+        var license2 = await License.LoadAsync(ms2, TestContext.Current.CancellationToken);
 
         Assert.NotNull(license2);
         Assert.Equal(originalLicenseData, license2.GetDataForSignature());
@@ -174,11 +174,11 @@ public class Tests : IClassFixture<KeyFixture>
         var originalLicenseData = license.GetDataForSignature();
 
         var ms = new MemoryStream();
-        await license.SaveAsync(ms);
+        await license.SaveAsync(ms, TestContext.Current.CancellationToken);
         var serializedLicenseData = ms.ToArray();
 
         var ms2 = new MemoryStream(serializedLicenseData);
-        var license2 = await License.LoadAsync(ms2);
+        var license2 = await License.LoadAsync(ms2, TestContext.Current.CancellationToken);
 
         Assert.NotNull(license2);
         Assert.Equal(originalLicenseData, license2.GetDataForSignature());
@@ -503,10 +503,10 @@ public class Tests : IClassFixture<KeyFixture>
             .Build();
 
         var ms = new MemoryStream();
-        await license.SaveAsync(ms);
+        await license.SaveAsync(ms, TestContext.Current.CancellationToken);
 
         var ms2 = new MemoryStream(ms.ToArray());
-        var loaded = await License.LoadAsync(ms2);
+        var loaded = await License.LoadAsync(ms2, TestContext.Current.CancellationToken);
 
         Assert.NotNull(loaded);
 
@@ -525,10 +525,10 @@ public class Tests : IClassFixture<KeyFixture>
             .Build();
 
         var ms = new MemoryStream();
-        await license.SaveAsync(ms);
+        await license.SaveAsync(ms, TestContext.Current.CancellationToken);
 
         var ms2 = new MemoryStream(ms.ToArray());
-        var loaded = await License.LoadAsync(ms2);
+        var loaded = await License.LoadAsync(ms2, TestContext.Current.CancellationToken);
 
         Assert.NotNull(loaded);
 

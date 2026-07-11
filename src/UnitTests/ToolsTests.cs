@@ -63,7 +63,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
             keyPair.Private);
         using var publicPem = PublicPem(keyPair.Public);
 
-        var result = await NewValidator().ValidateAsync(licenseStream, publicPem, "MyApp");
+        var result = await NewValidator().ValidateAsync(licenseStream, publicPem, "MyApp", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.IsValid, result.Message);
         Assert.Null(result.Message);
@@ -81,7 +81,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
             keyPair.Private);
         using var publicPem = PublicPem(keyPair.Public);
 
-        var result = await NewValidator().ValidateAsync(licenseStream, publicPem, "MyApp");
+        var result = await NewValidator().ValidateAsync(licenseStream, publicPem, "MyApp", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.IsValid, result.Message);
     }
@@ -96,7 +96,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
             keyPair.Private);
         using var publicPem = PublicPem(keyPair.Public);
 
-        var result = await NewValidator().ValidateAsync(licenseStream, publicPem, "MyApp");
+        var result = await NewValidator().ValidateAsync(licenseStream, publicPem, "MyApp", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.IsValid, result.Message);
     }
@@ -110,7 +110,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
 
         using var pub = new MemoryStream();
         using var priv = new MemoryStream();
-        await KeyGen.SaveKeyPairAsync(keyPair, pub, priv, privateKeyPassword: null);
+        await KeyGen.SaveKeyPairAsync(keyPair, pub, priv, privateKeyPassword: null, cancellationToken: TestContext.Current.CancellationToken);
 
         pub.Position = 0;
         var publicKey = PemUtils.LoadKey(pub);
@@ -130,7 +130,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
 
         using var pub = new MemoryStream();
         using var priv = new MemoryStream();
-        await KeyGen.SaveKeyPairAsync(keyPair, pub, priv, "s3cret");
+        await KeyGen.SaveKeyPairAsync(keyPair, pub, priv, "s3cret", cancellationToken: TestContext.Current.CancellationToken);
 
         priv.Position = 0;
         var privateKey = PemUtils.LoadPrivateKey(priv, "s3cret");
@@ -144,7 +144,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
 
         using var pub = new MemoryStream();
         using var priv = new MemoryStream();
-        await KeyGen.SaveKeyPairAsync(keyPair, pub, priv, "correct-password");
+        await KeyGen.SaveKeyPairAsync(keyPair, pub, priv, "correct-password", cancellationToken: TestContext.Current.CancellationToken);
 
         priv.Position = 0;
         Assert.ThrowsAny<Exception>(() => PemUtils.LoadPrivateKey(priv, "wrong-password"));
@@ -157,7 +157,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
 
         using var pub = new MemoryStream();
         using var priv = new MemoryStream();
-        await KeyGen.SaveKeyPairAsync(keyPair, pub, priv, "correct-password");
+        await KeyGen.SaveKeyPairAsync(keyPair, pub, priv, "correct-password", cancellationToken: TestContext.Current.CancellationToken);
 
         priv.Position = 0;
         // An encrypted private key must not be loadable via the plain (password-less) path.
@@ -171,7 +171,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
 
         using var pub = new MemoryStream();
         using var priv = new MemoryStream();
-        await KeyGen.SaveKeyPairAsync(keyPair, pub, priv, "   ");
+        await KeyGen.SaveKeyPairAsync(keyPair, pub, priv, "   ", cancellationToken: TestContext.Current.CancellationToken);
 
         priv.Position = 0;
         // Whitespace-only password ⇒ plain save ⇒ loadable without a real password (via LoadPrivateKey).
@@ -188,18 +188,18 @@ public class ToolsTests : IClassFixture<KeyFixture>
 
         using var pub = new MemoryStream();
         using var priv = new MemoryStream();
-        await KeyGen.SaveKeyPairAsync(keyPair, pub, priv, privateKeyPassword: null);
+        await KeyGen.SaveKeyPairAsync(keyPair, pub, priv, privateKeyPassword: null, cancellationToken: TestContext.Current.CancellationToken);
         priv.Position = 0;
 
         // The generation service must load a PLAIN (unencrypted) private key from a PEM stream and sign.
         using var licenseStream = new MemoryStream();
         await LicenseGen.CreateAndSaveLicenseAsync(
             new LicenseGenerationRequest { ProductId = "MyApp", Algorithm = algorithm },
-            priv, privateKeyPassword: null, licenseStream);
+            priv, privateKeyPassword: null, licenseStream, cancellationToken: TestContext.Current.CancellationToken);
         licenseStream.Position = 0;
 
         using var publicPem = PublicPem(keyPair.Public);
-        var result = await NewValidator().ValidateAsync(licenseStream, publicPem, "MyApp");
+        var result = await NewValidator().ValidateAsync(licenseStream, publicPem, "MyApp", cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(result.IsValid, result.Message);
     }
 
@@ -210,17 +210,17 @@ public class ToolsTests : IClassFixture<KeyFixture>
 
         using var pub = new MemoryStream();
         using var priv = new MemoryStream();
-        await KeyGen.SaveKeyPairAsync(keyPair, pub, priv, "key-password");
+        await KeyGen.SaveKeyPairAsync(keyPair, pub, priv, "key-password", cancellationToken: TestContext.Current.CancellationToken);
         priv.Position = 0;
 
         using var licenseStream = new MemoryStream();
         await LicenseGen.CreateAndSaveLicenseAsync(
             new LicenseGenerationRequest { ProductId = "MyApp", Algorithm = LicenseAlgorithm.Rsa },
-            priv, "key-password", licenseStream);
+            priv, "key-password", licenseStream, cancellationToken: TestContext.Current.CancellationToken);
         licenseStream.Position = 0;
 
         using var publicPem = PublicPem(keyPair.Public);
-        var result = await NewValidator().ValidateAsync(licenseStream, publicPem, "MyApp");
+        var result = await NewValidator().ValidateAsync(licenseStream, publicPem, "MyApp", cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(result.IsValid, result.Message);
     }
 
@@ -234,7 +234,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
         try
         {
             await KeyGen.GenerateAndSaveKeyPairAsync(LicenseAlgorithm.Rsa, pubPath, privPath,
-                RsaKeySize.Rsa2048, "pwd");
+                RsaKeySize.Rsa2048, "pwd", cancellationToken: TestContext.Current.CancellationToken);
 
             Assert.True(File.Exists(pubPath));
             Assert.True(File.Exists(privPath));
@@ -259,7 +259,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
         using var ms = new MemoryStream();
         var license = await LicenseGen.CreateAndSaveLicenseAsync(
             new LicenseGenerationRequest { ProductId = "MyApp", Algorithm = LicenseAlgorithm.Rsa },
-            _keys.Rsa1PrivateKey, ms);
+            _keys.Rsa1PrivateKey, ms, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("RSA", license.SignedWith);
     }
@@ -270,7 +270,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
         using var ms = new MemoryStream();
         var license = await LicenseGen.CreateAndSaveLicenseAsync(
             new LicenseGenerationRequest { ProductId = "MyApp", Algorithm = LicenseAlgorithm.MlDsa },
-            _keys.MlDsa1PrivateKey, ms);
+            _keys.MlDsa1PrivateKey, ms, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("ML-DSA", license.SignedWith);
     }
@@ -284,7 +284,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
         using var ms = new MemoryStream();
         var license = await LicenseGen.CreateAndSaveLicenseAsync(
             new LicenseGenerationRequest { ProductId = "MyApp", Algorithm = LicenseAlgorithm.Rsa },
-            _keys.Rsa1PrivateKey, ms);
+            _keys.Rsa1PrivateKey, ms, cancellationToken: TestContext.Current.CancellationToken);
         var after = DateTime.UtcNow.AddSeconds(1);
 
         Assert.False(string.IsNullOrWhiteSpace(license.Id));
@@ -308,7 +308,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
                 Id = id,
                 CreationDate = created
             },
-            _keys.Rsa1PrivateKey, ms);
+            _keys.Rsa1PrivateKey, ms, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(id, license.Id);
         Assert.Equal(created, license.CreationDate);
@@ -323,7 +323,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
         await Assert.ThrowsAsync<ArgumentException>(() =>
             LicenseGen.CreateAndSaveLicenseAsync(
                 new LicenseGenerationRequest { ProductId = "MyApp", Algorithm = LicenseAlgorithm.Rsa },
-                _keys.Rsa1PublicKey, ms));
+                _keys.Rsa1PublicKey, ms, cancellationToken: TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -333,7 +333,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
         await Assert.ThrowsAsync<ArgumentException>(() =>
             LicenseGen.CreateAndSaveLicenseAsync(
                 new LicenseGenerationRequest { ProductId = "   ", Algorithm = LicenseAlgorithm.Rsa },
-                _keys.Rsa1PrivateKey, ms));
+                _keys.Rsa1PrivateKey, ms, cancellationToken: TestContext.Current.CancellationToken));
     }
 
     // ---------- Validation outcomes ----------
@@ -346,7 +346,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
             _keys.Rsa1PrivateKey);
         using var pub = PublicPem(_keys.Rsa1PublicKey);
 
-        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp");
+        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.IsValid);
         Assert.Null(result.Message);
@@ -361,7 +361,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
             _keys.Rsa1PrivateKey);
         using var pub = PublicPem(_keys.Rsa2PublicKey); // wrong key
 
-        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp");
+        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(result.IsValid);
         Assert.NotNull(result.Message);
@@ -376,7 +376,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
             _keys.MlDsa1PrivateKey);
         using var pub = PublicPem(_keys.MlDsa2PublicKey); // wrong key
 
-        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp");
+        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(result.IsValid);
     }
@@ -394,7 +394,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
             _keys.Rsa1PrivateKey);
         using var pub = PublicPem(_keys.Rsa1PublicKey);
 
-        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp");
+        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(result.IsValid);
     }
@@ -407,7 +407,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
             _keys.Rsa1PrivateKey);
         using var pub = PublicPem(_keys.Rsa1PublicKey);
 
-        var result = await NewValidator().ValidateAsync(lic, pub, "OtherApp");
+        var result = await NewValidator().ValidateAsync(lic, pub, "OtherApp", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(result.IsValid);
     }
@@ -420,7 +420,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
             _keys.Rsa1PrivateKey);
         using var pub = PublicPem(_keys.Rsa1PublicKey);
 
-        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp 1.2.3");
+        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp 1.2.3", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.IsValid, result.Message);
     }
@@ -433,7 +433,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
             _keys.Rsa1PrivateKey);
         using var pub = PublicPem(_keys.Rsa1PublicKey);
 
-        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp (1.0)");
+        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp (1.0)", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.IsValid, result.Message);
     }
@@ -451,7 +451,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
             _keys.Rsa1PrivateKey);
         using var pub = PublicPem(_keys.Rsa1PublicKey);
 
-        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp", "device-abc");
+        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp", "device-abc", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.IsValid, result.Message);
     }
@@ -469,7 +469,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
             _keys.Rsa1PrivateKey);
         using var pub = PublicPem(_keys.Rsa1PublicKey);
 
-        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp", "device-xyz");
+        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp", "device-xyz", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(result.IsValid);
     }
@@ -482,7 +482,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
             _keys.Rsa1PrivateKey);
         using var pub = PublicPem(_keys.Rsa1PublicKey);
 
-        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp", "any-device");
+        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp", "any-device", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.IsValid, result.Message);
     }
@@ -496,7 +496,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
         using var pub = PublicPem(_keys.Rsa1PublicKey);
 
         // productId omitted ⇒ the license validates against its own ProductId.
-        var result = await NewValidator().ValidateAsync(lic, pub, productId: null);
+        var result = await NewValidator().ValidateAsync(lic, pub, productId: null, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(result.IsValid, result.Message);
     }
@@ -513,7 +513,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
         using var tampered = new MemoryStream(Encoding.UTF8.GetBytes(json));
         using var pub = PublicPem(_keys.Rsa1PublicKey);
 
-        var result = await NewValidator().ValidateAsync(tampered, pub, "MyApp");
+        var result = await NewValidator().ValidateAsync(tampered, pub, "MyApp", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(result.IsValid);
     }
@@ -526,7 +526,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
         using var lic = new MemoryStream(Encoding.UTF8.GetBytes("this is not valid json {"));
         using var pub = PublicPem(_keys.Rsa1PublicKey);
 
-        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp");
+        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(result.IsValid);
         Assert.NotNull(result.Message);
@@ -542,7 +542,7 @@ public class ToolsTests : IClassFixture<KeyFixture>
             _keys.Rsa1PrivateKey);
         using var pub = new MemoryStream(Encoding.UTF8.GetBytes("not a pem at all"));
 
-        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp");
+        var result = await NewValidator().ValidateAsync(lic, pub, "MyApp", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(result.IsValid);
         Assert.NotNull(result.Message);
