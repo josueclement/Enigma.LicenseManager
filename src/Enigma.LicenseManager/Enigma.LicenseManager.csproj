@@ -3,15 +3,12 @@
     <PropertyGroup>
         <OutputType>Library</OutputType>
         <TargetFrameworks>netstandard2.0;net8.0</TargetFrameworks>
-        <Nullable>enable</Nullable>
-        <LangVersion>14</LangVersion>
-        <Authors>Josué Clément</Authors>
-        <Copyright>Copyright © 2026 Josué Clément</Copyright>
         <PackageId>Enigma.LicenseManager</PackageId>
         <Title>Enigma License Manager</Title>
         <Version>1.2.0</Version>
         <Description>Software license management library for .NET with RSA and ML-DSA (post-quantum) signature support, device binding, wildcard product matching, and async persistence.</Description>
         <PackageTags>enigma;license;licensing;cryptography;rsa;ml-dsa;post-quantum;device-binding;signature;validation</PackageTags>
+        <PackageReleaseNotes>v1.2.0 — production-readiness release. Highlights: Enigma.Cryptography upgraded to 5.0.0, Central Package Management adopted, a non-Avalonia dependency refresh, the test suite migrated to xUnit v3, and build settings consolidated into Directory.Build.props + .editorconfig. No public API or behavioural change — a recompile-and-verify upgrade; licenses and keys created with earlier 1.x releases remain compatible. See RELEASENOTES.md for details.</PackageReleaseNotes>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <RepositoryUrl>https://github.com/josueclement/Enigma.LicenseManager</RepositoryUrl>

@@ -1,6 +1,6 @@
 # FEATURE-004 — Prepare the 1.2.0 release
 
-**Status:** TODO (planned via `/interview`; implement with `/build FEATURE-004`)
+**Status:** DONE (all 4 phases complete)
 **Type:** FEATURE (multi-phase, 4 phases)
 
 ## Objective
@@ -38,7 +38,7 @@ xUnit v2→v3 test migration, and a documentation sweep + release checklist.
 
 ## PHASE01 — Build-settings consolidation
 
-**Status:** TODO · Suggested branch: `feature/feature-004-phase01-build-props`
+**Status:** DONE · Suggested branch: `feature/feature-004-phase01-build-props`
 
 - Add root `Directory.Build.props` mirroring `../Enigma.Cryptography/Directory.Build.props`: `Authors`,
   `Copyright`, `LangVersion 14`, `Nullable enable`, `TreatWarningsAsErrors true`, `EnforceCodeStyleInBuild true`.
@@ -59,7 +59,7 @@ xUnit v2→v3 test migration, and a documentation sweep + release checklist.
 
 ## PHASE02 — `Directory.Packages.props` overhaul
 
-**Status:** TODO · Suggested branch: `feature/feature-004-phase02-packages`
+**Status:** DONE · Suggested branch: `feature/feature-004-phase02-packages`
 
 - Reorganize the single flat `ItemGroup` into commented category groups, keeping the leading
   `ManagePackageVersionsCentrally` PropertyGroup:
@@ -83,7 +83,7 @@ xUnit v2→v3 test migration, and a documentation sweep + release checklist.
 
 ## PHASE03 — xUnit v3 migration
 
-**Status:** TODO · Suggested branch: `feature/feature-004-phase03-xunit-v3`
+**Status:** DONE · Suggested branch: `feature/feature-004-phase03-xunit-v3`
 
 - Rewrite `src/UnitTests/UnitTests.csproj` to mirror `../Enigma.Cryptography/src/UnitTests/UnitTests.csproj`:
   `OutputType=Exe`, `TestingPlatformDotnetTestSupport=true`; references `Microsoft.NET.Test.Sdk` + `xunit.v3` +
@@ -99,7 +99,7 @@ xUnit v2→v3 test migration, and a documentation sweep + release checklist.
 
 ## PHASE04 — Production-readiness docs & release checklist
 
-**Status:** TODO · Suggested branch: `feature/feature-004-phase04-docs`
+**Status:** DONE · Suggested branch: `feature/feature-004-phase04-docs`
 
 - **README.md:** add NuGet-version + MIT-license badges; verify RSA / ML-DSA / device-binding / `LicenseService`
   samples and the `enigma-license` CLI command + exit-code reference against the built 1.2.0, correcting drift.

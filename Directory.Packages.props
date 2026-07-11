@@ -2,6 +2,27 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
+
+  <!-- Core library (Enigma.LicenseManager) -->
+  <ItemGroup>
+    <PackageVersion Include="DeviceId" Version="6.11.0" />
+    <PackageVersion Include="Enigma.Cryptography" Version="5.0.0" />
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageVersion Include="Ulid" Version="1.4.1" />
+  </ItemGroup>
+
+  <!-- Tools (Enigma.LicenseManager.Tools) -->
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.9" />
+  </ItemGroup>
+
+  <!-- CLI (Enigma.LicenseManager.Cli) -->
+  <ItemGroup>
+    <PackageVersion Include="System.CommandLine" Version="2.0.9" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.9" />
+  </ItemGroup>
+
+  <!-- Desktop (Avalonia) — held at current versions; Avalonia work is reserved for the next feature -->
   <ItemGroup>
     <PackageVersion Include="Avalonia" Version="12.0.5" />
     <PackageVersion Include="Avalonia.Desktop" Version="12.0.5" />
@@ -10,20 +31,16 @@
     <PackageVersion Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.3" />
     <PackageVersion Include="Carbon.Avalonia.Desktop" Version="0.2.0" />
     <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2" />
-    <PackageVersion Include="coverlet.collector" Version="8.0.0" />
-    <PackageVersion Include="DeviceId" Version="6.11.0" />
-    <PackageVersion Include="Enigma.Cryptography" Version="5.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.9" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />
-    <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageVersion Include="NLog" Version="6.1.3" />
-    <PackageVersion Include="NLog.Extensions.Logging" Version="6.1.3" />
+    <PackageVersion Include="NLog" Version="6.1.4" />
+    <PackageVersion Include="NLog.Extensions.Logging" Version="6.1.4" />
     <PackageVersion Include="PhosphorIconsAvalonia" Version="1.2.0" />
-    <PackageVersion Include="System.CommandLine" Version="2.0.9" />
-    <PackageVersion Include="Ulid" Version="1.4.1" />
-    <PackageVersion Include="xunit" Version="2.9.3" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+  </ItemGroup>
+
+  <!-- Tests (UnitTests) — xUnit v3 on the Microsoft Testing Platform -->
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.7.0" />
+    <PackageVersion Include="coverlet.collector" Version="10.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="10.0.9" />
+    <PackageVersion Include="xunit.v3" Version="3.2.2" />
   </ItemGroup>
 </Project>

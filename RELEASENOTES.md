@@ -1,12 +1,24 @@
 # v1.2.0 Release Notes
 
+A production-readiness release: no public API or behavioural change, but a full pass over dependencies,
+the test stack, and build configuration to align the repository with its sibling `Enigma.Cryptography`.
+This is a recompile-and-verify upgrade — licenses and keys created with earlier 1.x releases remain
+compatible.
+
 ## Dependencies
 
 - **Upgrade `Enigma.Cryptography` to 5.0.0:** The library now builds against `Enigma.Cryptography` 5.0.0 (from 4.x). The consumed cryptographic surface is source-identical between 4.3.0 and 5.0.0, so this is a recompile-and-verify with no API or behavioural change — RSA and ML-DSA sign/verify round-trips and encrypted-PEM load/save are unaffected, and licenses/keys created with 4.x remain compatible. The packaged dependency floor is now `Enigma.Cryptography >= 5.0.0`.
+- **Refresh non-Avalonia dependencies:** `coverlet.collector` 8.0.0 → 10.0.1, `Microsoft.Extensions.DependencyInjection.Abstractions` 8.0.2 → 10.0.9 (aligned with `Microsoft.Extensions.DependencyInjection` 10.0.9), `Microsoft.NET.Test.Sdk` 18.3.0 → 18.7.0, and `NLog` / `NLog.Extensions.Logging` 6.1.3 → 6.1.4. The core library's packaged dependencies (`DeviceId`, `Newtonsoft.Json`, `Ulid`) were already current and are unchanged.
+- **Hold the Avalonia ecosystem:** the four `Avalonia.*` packages plus `Carbon.Avalonia.Desktop`, `PhosphorIconsAvalonia`, and `AvaloniaUI.DiagnosticsSupport` are version-coupled to Avalonia and were deliberately held at their current versions; the Avalonia upgrade is reserved for a later release.
 
 ## Build & Tooling
 
 - **Introduce Central Package Management (CPM):** Package versions are now pinned once in a solution-root `Directory.Packages.props` (`ManagePackageVersionsCentrally=true`); individual `<PackageReference>` items no longer carry a `Version`. This also removes the previous cross-project version drift of `Enigma.Cryptography`.
+- **Consolidate build settings:** shared build properties (`Authors`, `Copyright`, `LangVersion 14`, `Nullable enable`, `TreatWarningsAsErrors true`, `EnforceCodeStyleInBuild true`) moved out of the individual csprojs into a solution-root `Directory.Build.props`, with a repository-root `.editorconfig` carrying the code-style rules. Warnings-as-errors and code-style enforcement now apply solution-wide, and the build is warning-free across all target frameworks.
+
+## Tests
+
+- **Migrate to xUnit v3:** the `UnitTests` project moved from xUnit v2 to xUnit v3 on the Microsoft Testing Platform (`OutputType=Exe`, `TestingPlatformDotnetTestSupport=true`), matching the sibling repository. The `xunit` and `xunit.runner.visualstudio` packages were replaced by `xunit.v3`; the full suite passes on the new runner.
 
 # v1.1.0 Release Notes
 

@@ -10,7 +10,7 @@ using NLog.Extensions.Logging;
 
 namespace Enigma.LicenseManager.Desktop;
 
-sealed class Program
+internal sealed class Program
 {
     internal static IHost? AppHost { get; private set; }
 
