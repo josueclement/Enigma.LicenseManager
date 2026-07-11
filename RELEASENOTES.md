@@ -1,3 +1,13 @@
+# v1.2.0 Release Notes
+
+## Dependencies
+
+- **Upgrade `Enigma.Cryptography` to 5.0.0:** The library now builds against `Enigma.Cryptography` 5.0.0 (from 4.x). The consumed cryptographic surface is source-identical between 4.3.0 and 5.0.0, so this is a recompile-and-verify with no API or behavioural change — RSA and ML-DSA sign/verify round-trips and encrypted-PEM load/save are unaffected, and licenses/keys created with 4.x remain compatible. The packaged dependency floor is now `Enigma.Cryptography >= 5.0.0`.
+
+## Build & Tooling
+
+- **Introduce Central Package Management (CPM):** Package versions are now pinned once in a solution-root `Directory.Packages.props` (`ManagePackageVersionsCentrally=true`); individual `<PackageReference>` items no longer carry a `Version`. This also removes the previous cross-project version drift of `Enigma.Cryptography`.
+
 # v1.1.0 Release Notes
 
 ## Breaking Changes

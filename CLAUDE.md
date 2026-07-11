@@ -33,5 +33,6 @@ The library targets `netstandard2.0` and `net8.0`. Conditional `#if NET7_0_OR_GR
 - Inter-project references use relative paths (e.g., `../Enigma.LicenseManager/...`)
 - Test data files (`src/UnitTests/Data/*.pem`) use `CopyToOutputDirectory` — paths are project-relative
 - `GeneratePackageOnBuild` is enabled — every build produces a .nupkg
+- Central Package Management (CPM) is in effect — package versions are pinned once in the solution-root `Directory.Packages.props` (`<PackageVersion>`); individual `<PackageReference>` items must carry **no** `Version` attribute. Bump a dependency there, not in a csproj
 - Tests use a shared `KeyFixture` (`IClassFixture<KeyFixture>`) that loads PEM keys once; PEM password is `test1234`
 - Cryptography comes from `Enigma.Cryptography` (BouncyCastle-based) — keys are `AsymmetricKeyParameter`
