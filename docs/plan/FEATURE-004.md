@@ -1,6 +1,6 @@
 # FEATURE-004 — Prepare the 1.2.0 release
 
-**Status:** IN PROGRESS (planned via `/interview`; implement with `/build FEATURE-004`)
+**Status:** DONE (all 4 phases complete)
 **Type:** FEATURE (multi-phase, 4 phases)
 
 ## Objective
@@ -99,7 +99,7 @@ xUnit v2→v3 test migration, and a documentation sweep + release checklist.
 
 ## PHASE04 — Production-readiness docs & release checklist
 
-**Status:** TODO · Suggested branch: `feature/feature-004-phase04-docs`
+**Status:** DONE · Suggested branch: `feature/feature-004-phase04-docs`
 
 - **README.md:** add NuGet-version + MIT-license badges; verify RSA / ML-DSA / device-binding / `LicenseService`
   samples and the `enigma-license` CLI command + exit-code reference against the built 1.2.0, correcting drift.

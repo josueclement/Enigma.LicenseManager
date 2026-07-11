@@ -10,8 +10,8 @@ Single registry of every tracked work item. Status vocabulary: `TODO`, `IN PROGR
 | - PHASE03   | Feature pages: Generate Keys / Generate Licenses / Validate Licenses | DONE | (in FEATURE-001.md) |
 | FEATURE-002 | License-management CLI tool (`Enigma.LicenseManager.Cli`) | DONE | docs/plan/FEATURE-002.md |
 | FEATURE-003 | Upgrade Enigma.Cryptography to 5.0.0 + Central Package Management | DONE | docs/plan/FEATURE-003.md |
-| FEATURE-004 | Prepare 1.2.0 release (build-config, deps, xUnit v3, docs) | IN PROGRESS | docs/plan/FEATURE-004.md |
+| FEATURE-004 | Prepare 1.2.0 release (build-config, deps, xUnit v3, docs) | DONE   | docs/plan/FEATURE-004.md |
 | - PHASE01   | Build-settings consolidation (`Directory.Build.props` + `.editorconfig`) | DONE | (in FEATURE-004.md) |
 | - PHASE02   | `Directory.Packages.props` overhaul + non-Avalonia dependency refresh | DONE | (in FEATURE-004.md) |
 | - PHASE03   | xUnit v2 → v3 migration                            | DONE   | (in FEATURE-004.md)      |
-| - PHASE04   | Production-readiness docs + release checklist      | TODO   | (in FEATURE-004.md)      |
+| - PHASE04   | Production-readiness docs + release checklist      | DONE   | (in FEATURE-004.md)      |
