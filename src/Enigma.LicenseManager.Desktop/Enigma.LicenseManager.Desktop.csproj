@@ -3,11 +3,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <LangVersion>14</LangVersion>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
-    <Authors>Josué Clément</Authors>
-    <Copyright>Copyright © 2026 Josué Clément</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,6 +1,6 @@
 # FEATURE-004 — Prepare the 1.2.0 release
 
-**Status:** TODO (planned via `/interview`; implement with `/build FEATURE-004`)
+**Status:** IN PROGRESS (planned via `/interview`; implement with `/build FEATURE-004`)
 **Type:** FEATURE (multi-phase, 4 phases)
 
 ## Objective
@@ -38,7 +38,7 @@ xUnit v2→v3 test migration, and a documentation sweep + release checklist.
 
 ## PHASE01 — Build-settings consolidation
 
-**Status:** TODO · Suggested branch: `feature/feature-004-phase01-build-props`
+**Status:** DONE · Suggested branch: `feature/feature-004-phase01-build-props`
 
 - Add root `Directory.Build.props` mirroring `../Enigma.Cryptography/Directory.Build.props`: `Authors`,
   `Copyright`, `LangVersion 14`, `Nullable enable`, `TreatWarningsAsErrors true`, `EnforceCodeStyleInBuild true`.
