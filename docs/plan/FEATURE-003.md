@@ -1,6 +1,6 @@
 # FEATURE-003 — Upgrade Enigma.Cryptography to 5.0.0 + Central Package Management
 
-**Status:** TODO · **Type:** FEATURE (single-phase) · **Planned now, built later.**
+**Status:** DONE · **Type:** FEATURE (single-phase) · **Planned now, built later.**
 
 ## Objective
 

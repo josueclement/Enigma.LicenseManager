@@ -9,7 +9,7 @@
         <Copyright>Copyright © 2026 Josué Clément</Copyright>
         <PackageId>Enigma.LicenseManager</PackageId>
         <Title>Enigma License Manager</Title>
-        <Version>1.1.0</Version>
+        <Version>1.2.0</Version>
         <Description>Software license management library for .NET with RSA and ML-DSA (post-quantum) signature support, device binding, wildcard product matching, and async persistence.</Description>
         <PackageTags>enigma;license;licensing;cryptography;rsa;ml-dsa;post-quantum;device-binding;signature;validation</PackageTags>
         <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -26,10 +26,10 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="DeviceId" Version="6.11.0" />
-      <PackageReference Include="Enigma.Cryptography" Version="4.2.1" />
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-      <PackageReference Include="Ulid" Version="1.4.1" />
+      <PackageReference Include="DeviceId" />
+      <PackageReference Include="Enigma.Cryptography" />
+      <PackageReference Include="Newtonsoft.Json" />
+      <PackageReference Include="Ulid" />
     </ItemGroup>
 
 </Project>
