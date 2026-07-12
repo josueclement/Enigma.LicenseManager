@@ -4,6 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <ApplicationIcon>Assets/appicon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,6 +31,10 @@
     <!-- Dogfood the in-development core library + shared Tools layer via ProjectReference. -->
     <ProjectReference Include="..\Enigma.LicenseManager\Enigma.LicenseManager.csproj" />
     <ProjectReference Include="..\Enigma.LicenseManager.Tools\Enigma.LicenseManager.Tools.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets/**" />
   </ItemGroup>
 
   <ItemGroup>

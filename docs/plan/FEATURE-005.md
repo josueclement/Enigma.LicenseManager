@@ -1,6 +1,6 @@
 # FEATURE-005 — Avalonia desktop improvements
 
-**Status: TODO** (PHASE01 TODO · PHASE02 TODO · PHASE03 TODO · PHASE04 TODO)
+**Status: DONE** (PHASE01 DONE · PHASE02 DONE · PHASE03 DONE · PHASE04 DONE)
 
 ## Context
 
@@ -85,7 +85,7 @@ Out of scope: core library, Tools, CLI, tests project (existing tests must keep 
 
 ---
 
-## PHASE01 — Bump Avalonia to 12.1.0 · **Status: TODO**
+## PHASE01 — Bump Avalonia to 12.1.0 · **Status: DONE**
 - **File:** `Directory.Packages.props` — change the four `Avalonia.*` `<PackageVersion>`
   lines from `12.0.5` to `12.1.0`: `Avalonia`, `Avalonia.Desktop`, `Avalonia.Fonts.Inter`,
   `Avalonia.Themes.Fluent`. Leave `AvaloniaUI.DiagnosticsSupport`, `Carbon.Avalonia.Desktop`,
@@ -94,7 +94,7 @@ Out of scope: core library, Tools, CLI, tests project (existing tests must keep 
 - **Acceptance:** solution restores + builds with zero warnings on 12.1.0; app launches; full
   test suite still green.
 
-## PHASE02 — Default RSA key size = 4096 · **Status: TODO**
+## PHASE02 — Default RSA key size = 4096 · **Status: DONE**
 - **File:** `src/Enigma.LicenseManager.Desktop/ViewModels/GenerateKeysPageViewModel.cs`,
   `UpdateParameterOptions()` (currently `SelectedParameterIndex = 0` → "2048", ~line 169).
 - Pre-select `"4096"` (index 2 of `{ "2048","3072","4096","8192" }`) for RSA while ML-DSA
@@ -102,7 +102,7 @@ Out of scope: core library, Tools, CLI, tests project (existing tests must keep 
 - **Acceptance:** on launch (RSA selected) the key-size combo shows **4096**; switching to
   ML-DSA and back to RSA still lands on 4096; generation still parses the value correctly.
 
-## PHASE03 — Real embedded app icon · **Status: TODO**
+## PHASE03 — Real embedded app icon · **Status: DONE**
 - **Asset:** generate `src/Enigma.LicenseManager.Desktop/Assets/appicon.ico` — multi-resolution
   ICO (16/24/32/48/64/128/256) of the white Phosphor `Icon.certificate` (`IconType.fill`) glyph.
   `Helpers/AppIconHelper.cs` already contains the ICO-writing logic (`WriteIco` writes to any
@@ -118,7 +118,7 @@ Out of scope: core library, Tools, CLI, tests project (existing tests must keep 
 - **Acceptance:** clean build; window/taskbar and the built `.exe` show the certificate icon
   (not the Avalonia default); no unused-symbol warnings.
 
-## PHASE04 — License profiles (save / load) · **Status: TODO**
+## PHASE04 — License profiles (save / load) · **Status: DONE**
 - **New model:** `src/Enigma.LicenseManager.Desktop/Models/LicenseProfile.cs` — POCO with
   `ProductId`, `Owner`, `DeviceId`, `Algorithm` (string "RSA"/"ML-DSA"), `HasExpiration`
   (bool), `ExpirationDate` (DateTime?), `SigningKeyPath`. **No password, no output path.**

@@ -1,11 +1,9 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Media;
 using Avalonia.Styling;
 using System;
 using Avalonia.Markup.Xaml;
 using Carbon.Avalonia.Desktop.Services;
-using Enigma.LicenseManager.Desktop.Helpers;
 using Enigma.LicenseManager.Desktop.Models;
 using Enigma.LicenseManager.Desktop.ViewModels;
 using Enigma.LicenseManager.Desktop.Views;
@@ -13,7 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NLog.Extensions.Logging;
-using PhosphorIconsAvalonia;
 
 namespace Enigma.LicenseManager.Desktop;
 
@@ -39,7 +36,6 @@ public partial class App : Application
             var mainWindow = services.GetRequiredService<MainWindow>();
             var vm = services.GetRequiredService<MainWindowViewModel>();
             mainWindow.DataContext = vm;
-            mainWindow.Icon = AppIconHelper.CreateWindowIcon(Icon.certificate, IconType.fill, Colors.White);
 
             services.GetRequiredService<IContentDialogService>().RegisterHost(mainWindow.HostDialog);
             services.GetRequiredService<IOverlayService>().RegisterHost(mainWindow.HostOverlay);

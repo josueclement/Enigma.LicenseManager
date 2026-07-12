@@ -155,7 +155,7 @@ service.RemoveLicense(license);
 **Enigma License Manager** is an [Avalonia](https://avaloniaui.net/) desktop application (`src/Enigma.LicenseManager.Desktop/`) for working with keys and licenses through a GUI, without writing code. It provides three pages:
 
 - **Generate Keys** — generate an RSA (2048/3072/4096/8192) or ML-DSA (level 87) key pair and save the public / private keys to PEM, optionally encrypting the private key with a password.
-- **Generate Licenses** — build and sign a license (product ID, owner, optional device binding and expiration) with an RSA or ML-DSA private key, and save it as JSON.
+- **Generate Licenses** — build and sign a license (product ID, owner, optional device binding and expiration) with an RSA or ML-DSA private key, and save it as JSON. Reusable **profiles** save/load the form fields to a `.json` file (the signing key password is never stored).
 - **Validate Licenses** — validate a license file against a public key, optionally constraining the product ID and device ID.
 
 A runtime light / dark theme toggle is persisted per user. Run it with:
