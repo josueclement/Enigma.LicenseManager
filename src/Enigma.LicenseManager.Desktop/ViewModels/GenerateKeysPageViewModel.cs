@@ -166,7 +166,8 @@ public class GenerateKeysPageViewModel : ObservableObject
         };
         foreach (var opt in options)
             ParameterOptions.Add(opt);
-        SelectedParameterIndex = 0;
+        // Pre-select 4096 (index 2) for RSA — the safer default; ML-DSA has a single option (index 0).
+        SelectedParameterIndex = SelectedAlgorithmIndex == 0 ? 2 : 0;
     }
 
     private async Task BrowsePublicKeyPathAsync()

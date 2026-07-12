@@ -1,6 +1,6 @@
 # FEATURE-005 — Avalonia desktop improvements
 
-**Status: IN PROGRESS** (PHASE01 DONE · PHASE02 TODO · PHASE03 TODO · PHASE04 TODO)
+**Status: IN PROGRESS** (PHASE01 DONE · PHASE02 DONE · PHASE03 TODO · PHASE04 TODO)
 
 ## Context
 
@@ -94,7 +94,7 @@ Out of scope: core library, Tools, CLI, tests project (existing tests must keep 
 - **Acceptance:** solution restores + builds with zero warnings on 12.1.0; app launches; full
   test suite still green.
 
-## PHASE02 — Default RSA key size = 4096 · **Status: TODO**
+## PHASE02 — Default RSA key size = 4096 · **Status: DONE**
 - **File:** `src/Enigma.LicenseManager.Desktop/ViewModels/GenerateKeysPageViewModel.cs`,
   `UpdateParameterOptions()` (currently `SelectedParameterIndex = 0` → "2048", ~line 169).
 - Pre-select `"4096"` (index 2 of `{ "2048","3072","4096","8192" }`) for RSA while ML-DSA
