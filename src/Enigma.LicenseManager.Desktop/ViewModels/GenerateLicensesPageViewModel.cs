@@ -1,5 +1,7 @@
 using System;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Carbon.Avalonia.Desktop.Controls.InfoBar;
 using Carbon.Avalonia.Desktop.Services;
@@ -17,6 +19,12 @@ namespace Enigma.LicenseManager.Desktop.ViewModels;
 /// </summary>
 public class GenerateLicensesPageViewModel : ObservableObject
 {
+    private static readonly JsonSerializerOptions ProfileSerializerOptions = new()
+    {
+        WriteIndented = true,
+        PropertyNameCaseInsensitive = true,
+    };
+
     private readonly ILicenseGenerationService _licenseGenerationService;
     private readonly IFileDialogService _fileDialogService;
     private readonly IInfoBarService _infoBarService;
@@ -36,11 +44,15 @@ public class GenerateLicensesPageViewModel : ObservableObject
         BrowseSigningKeyCommand = new AsyncRelayCommand(BrowseSigningKeyAsync);
         BrowseLicenseOutputCommand = new AsyncRelayCommand(BrowseLicenseOutputAsync);
         GenerateLicenseCommand = new AsyncRelayCommand(GenerateLicenseAsync);
+        SaveProfileCommand = new AsyncRelayCommand(SaveProfileAsync);
+        LoadProfileCommand = new AsyncRelayCommand(LoadProfileAsync);
     }
 
     public AsyncRelayCommand BrowseSigningKeyCommand { get; }
     public AsyncRelayCommand BrowseLicenseOutputCommand { get; }
     public AsyncRelayCommand GenerateLicenseCommand { get; }
+    public AsyncRelayCommand SaveProfileCommand { get; }
+    public AsyncRelayCommand LoadProfileCommand { get; }
 
     // --- Generation properties ---
 
@@ -178,6 +190,98 @@ public class GenerateLicensesPageViewModel : ObservableObject
             "Save License", _defaultPaths.Licenses, "license.json", ".json", true, null);
         if (path is not null)
             LicenseOutputPath = path;
+    }
+
+    // --- Profile save / load ---
+
+    private async Task SaveProfileAsync()
+    {
+        var path = await _fileDialogService.ShowSaveFileDialogAsync(
+            "Save Profile", _defaultPaths.Licenses, "license-profile.json", ".json", true, null);
+        if (path is null)
+            return;
+
+        try
+        {
+            var profile = new LicenseProfile
+            {
+                ProductId = string.IsNullOrWhiteSpace(ProductId) ? null : ProductId,
+                Owner = string.IsNullOrWhiteSpace(Owner) ? null : Owner,
+                DeviceId = string.IsNullOrWhiteSpace(DeviceId) ? null : DeviceId,
+                Algorithm = SigningAlgorithmOptions[SelectedSigningAlgorithmIndex],
+                HasExpiration = HasExpiration,
+                ExpirationDate = HasExpiration ? ExpirationDate : null,
+                SigningKeyPath = string.IsNullOrWhiteSpace(SigningKeyPath) ? null : SigningKeyPath,
+                // Signing key password and license output path are deliberately never persisted.
+            };
+
+            await File.WriteAllTextAsync(path, JsonSerializer.Serialize(profile, ProfileSerializerOptions));
+
+            await _infoBarService.ShowAsync(bar =>
+            {
+                bar.Title = "Success";
+                bar.Message = "Profile saved successfully.";
+                bar.Severity = InfoBarSeverity.Success;
+            });
+        }
+        catch (Exception ex)
+        {
+            await _infoBarService.ShowAsync(bar =>
+            {
+                bar.Title = "Error";
+                bar.Message = $"Could not save profile: {ex.Message}";
+                bar.Severity = InfoBarSeverity.Error;
+            });
+        }
+    }
+
+    private async Task LoadProfileAsync()
+    {
+        var paths = await _fileDialogService.ShowOpenFileDialogAsync(
+            "Load Profile", false, _defaultPaths.Licenses, ".json", null);
+        var path = paths.FirstOrDefault();
+        if (path is null)
+            return;
+
+        try
+        {
+            var json = await File.ReadAllTextAsync(path);
+            var profile = JsonSerializer.Deserialize<LicenseProfile>(json, ProfileSerializerOptions)
+                ?? throw new InvalidOperationException("The profile file is empty or not a valid profile.");
+
+            ProductId = profile.ProductId;
+            Owner = profile.Owner;
+            DeviceId = profile.DeviceId;
+            SelectedSigningAlgorithmIndex = ResolveAlgorithmIndex(profile.Algorithm);
+            HasExpiration = profile.HasExpiration;
+            ExpirationDate = profile.ExpirationDate;
+            SigningKeyPath = profile.SigningKeyPath;
+
+            await _infoBarService.ShowAsync(bar =>
+            {
+                bar.Title = "Success";
+                bar.Message = "Profile loaded successfully.";
+                bar.Severity = InfoBarSeverity.Success;
+            });
+        }
+        catch (Exception ex)
+        {
+            await _infoBarService.ShowAsync(bar =>
+            {
+                bar.Title = "Error";
+                bar.Message = $"Could not load profile: {ex.Message}";
+                bar.Severity = InfoBarSeverity.Error;
+            });
+        }
+    }
+
+    /// <summary>Maps a persisted algorithm name back to its combo index, keeping the current selection if unknown.</summary>
+    private int ResolveAlgorithmIndex(string? algorithm)
+    {
+        if (algorithm is null)
+            return SelectedSigningAlgorithmIndex;
+        var index = Array.IndexOf(SigningAlgorithmOptions, algorithm);
+        return index >= 0 ? index : SelectedSigningAlgorithmIndex;
     }
 
     // --- Generate License ---

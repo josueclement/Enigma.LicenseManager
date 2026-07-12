@@ -18,6 +18,14 @@
       <TextBlock Text="Generate software licenses with RSA or ML-DSA signatures."
                  Opacity="0.7" TextWrapping="Wrap" />
 
+      <!-- Profile actions (password is never saved to a profile) -->
+      <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+        <Button Content="Load Profile..."
+                Command="{Binding LoadProfileCommand}" />
+        <Button Content="Save Profile..."
+                Command="{Binding SaveProfileCommand}" />
+      </StackPanel>
+
       <!-- License Details -->
       <carbon:SettingsCardExpander Header="License Details"
                                   Description="Configure the license metadata"

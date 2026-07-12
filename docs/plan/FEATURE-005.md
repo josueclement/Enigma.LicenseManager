@@ -1,6 +1,6 @@
 # FEATURE-005 — Avalonia desktop improvements
 
-**Status: IN PROGRESS** (PHASE01 DONE · PHASE02 DONE · PHASE03 DONE · PHASE04 TODO)
+**Status: DONE** (PHASE01 DONE · PHASE02 DONE · PHASE03 DONE · PHASE04 DONE)
 
 ## Context
 
@@ -118,7 +118,7 @@ Out of scope: core library, Tools, CLI, tests project (existing tests must keep 
 - **Acceptance:** clean build; window/taskbar and the built `.exe` show the certificate icon
   (not the Avalonia default); no unused-symbol warnings.
 
-## PHASE04 — License profiles (save / load) · **Status: TODO**
+## PHASE04 — License profiles (save / load) · **Status: DONE**
 - **New model:** `src/Enigma.LicenseManager.Desktop/Models/LicenseProfile.cs` — POCO with
   `ProductId`, `Owner`, `DeviceId`, `Algorithm` (string "RSA"/"ML-DSA"), `HasExpiration`
   (bool), `ExpirationDate` (DateTime?), `SigningKeyPath`. **No password, no output path.**
