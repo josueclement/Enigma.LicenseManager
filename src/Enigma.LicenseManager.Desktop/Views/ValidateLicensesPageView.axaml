@@ -1,0 +1,78 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Enigma.LicenseManager.Desktop.ViewModels"
+             xmlns:carbon="using:Carbon.Avalonia.Desktop.Controls"
+             xmlns:editors="using:Carbon.Avalonia.Desktop.Controls.Editors"
+             xmlns:helpers="using:Enigma.LicenseManager.Desktop.Helpers"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="600"
+             x:Class="Enigma.LicenseManager.Desktop.Views.ValidateLicensesPageView"
+             x:DataType="vm:ValidateLicensesPageViewModel">
+
+  <ScrollViewer>
+    <StackPanel Margin="24" Spacing="16" MaxWidth="800" HorizontalAlignment="Stretch">
+      <TextBlock Text="Validate Licenses"
+                 FontSize="24"
+                 FontWeight="SemiBold" />
+      <TextBlock Text="Validate software licenses against public keys."
+                 Opacity="0.7" TextWrapping="Wrap" />
+
+      <!-- Validation Inputs -->
+      <carbon:SettingsCardExpander Header="Validation Inputs"
+                                  Description="Select the license and public key to validate"
+                                  IsExpanded="True">
+        <StackPanel Spacing="12">
+          <editors:TextEditor Title="License File"
+                              Text="{Binding ValidateLicensePath}"
+                              PlaceholderText="Select license file..."
+                              helpers:FileDropHelper.IsEnabled="True"
+                              HasValidationError="{Binding LicensePathHasError}"
+                              ValidationErrorMessage="Required">
+            <editors:TextEditor.ActionContent>
+              <Button Content="Browse..."
+                      Command="{Binding BrowseValidateLicenseCommand}"
+                      Classes="borderless"
+                      Padding="4,2" />
+            </editors:TextEditor.ActionContent>
+          </editors:TextEditor>
+          <editors:TextEditor Title="Public Key File"
+                              Text="{Binding ValidatePublicKeyPath}"
+                              PlaceholderText="Select public key file..."
+                              helpers:FileDropHelper.IsEnabled="True"
+                              HasValidationError="{Binding PublicKeyPathHasError}"
+                              ValidationErrorMessage="Required">
+            <editors:TextEditor.ActionContent>
+              <Button Content="Browse..."
+                      Command="{Binding BrowseValidatePublicKeyCommand}"
+                      Classes="borderless"
+                      Padding="4,2" />
+            </editors:TextEditor.ActionContent>
+          </editors:TextEditor>
+          <editors:TextEditor Title="Product ID"
+                              Text="{Binding ValidateProductId}"
+                              PlaceholderText="Product ID to validate against (optional)" />
+          <editors:TextEditor Title="Device ID"
+                              Text="{Binding ValidateDeviceId}"
+                              PlaceholderText="Device ID to validate against (optional)" />
+        </StackPanel>
+      </carbon:SettingsCardExpander>
+
+      <!-- Validate Button -->
+      <Button Content="Validate License"
+              Command="{Binding ValidateLicenseCommand}"
+              HorizontalAlignment="Right"
+              Classes="accent" />
+
+      <!-- Validation Result -->
+      <Border IsVisible="{Binding HasValidationResult}"
+              Padding="16"
+              CornerRadius="4"
+              BorderThickness="1"
+              BorderBrush="{DynamicResource CarbonBackgroundBrush}">
+        <TextBlock Text="{Binding ValidationResult}"
+                   TextWrapping="Wrap" />
+      </Border>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

@@ -1,0 +1,45 @@
+<Window xmlns="https://github.com/avaloniaui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:vm="using:Enigma.LicenseManager.Desktop.ViewModels"
+       xmlns:controls="using:Carbon.Avalonia.Desktop.Controls"
+       xmlns:contentDialog="using:Carbon.Avalonia.Desktop.Controls.ContentDialog"
+       xmlns:infoBar="using:Carbon.Avalonia.Desktop.Controls.InfoBar"
+       xmlns:nav="using:Carbon.Avalonia.Desktop.Controls.Navigation"
+       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+       mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="550"
+       x:Class="Enigma.LicenseManager.Desktop.Views.MainWindow"
+       x:DataType="vm:MainWindowViewModel"
+       Title="Enigma License Manager"
+       Icon="/Assets/appicon.ico"
+       Width="900" Height="550"
+       Background="{DynamicResource CarbonBackgroundBrush}">
+
+    <Panel>
+        <DockPanel>
+            <DockPanel DockPanel.Dock="Left">
+                <Button DockPanel.Dock="Bottom"
+                        Command="{Binding ToggleThemeCommand}"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Margin="8"
+                        ToolTip.Tip="Toggle light / dark theme">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <PathIcon Data="{Binding ThemeToggleIcon}" Width="16" Height="16" />
+                        <TextBlock Text="Theme" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+                <nav:NavigationView Items="{Binding Navigation.Items}"
+                                    FooterItems="{Binding Navigation.FooterItems}"
+                                    SelectedItem="{Binding Navigation.SelectedItem}"
+                                    Orientation="Vertical" />
+            </DockPanel>
+            <ContentControl Content="{Binding Navigation.CurrentPage}"
+                            Margin="0" />
+        </DockPanel>
+
+        <contentDialog:ContentDialog x:Name="HostDialog" />
+        <controls:Overlay x:Name="HostOverlay" />
+        <infoBar:InfoBar x:Name="HostInfoBar" />
+    </Panel>
+</Window>

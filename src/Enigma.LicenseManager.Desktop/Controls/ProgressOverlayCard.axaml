@@ -1,0 +1,55 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:Enigma.LicenseManager.Desktop.Controls">
+
+    <ControlTheme x:Key="{x:Type controls:ProgressOverlayCard}" TargetType="controls:ProgressOverlayCard">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="ClipToBounds" Value="False" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Background="{DynamicResource CarbonSurfaceHighBrush}"
+                        BorderBrush="{DynamicResource CarbonBorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        MinWidth="320"
+                        MaxWidth="480"
+                        BoxShadow="0 8 32 #40000000">
+                    <Grid RowDefinitions="Auto,Auto,Auto,Auto" Margin="24">
+                        <!-- Title -->
+                        <TextBlock Grid.Row="0"
+                                   Text="{TemplateBinding Title}"
+                                   FontSize="20"
+                                   FontWeight="SemiBold"
+                                   Margin="0,0,0,16"
+                                   IsVisible="{TemplateBinding Title, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+                        <!-- ProgressBar -->
+                        <ProgressBar Grid.Row="1"
+                                     IsIndeterminate="{Binding IsIndeterminate, RelativeSource={RelativeSource TemplatedParent}}"
+                                     Value="{Binding Progress, RelativeSource={RelativeSource TemplatedParent}}"
+                                     Minimum="{Binding Minimum, RelativeSource={RelativeSource TemplatedParent}}"
+                                     Maximum="{Binding Maximum, RelativeSource={RelativeSource TemplatedParent}}"
+                                     Margin="0,0,0,12" />
+
+                        <!-- Message -->
+                        <TextBlock Grid.Row="2"
+                                   Text="{TemplateBinding Message}"
+                                   Foreground="{DynamicResource CarbonForegroundSecondaryBrush}"
+                                   TextWrapping="Wrap"
+                                   Margin="0,0,0,4"
+                                   IsVisible="{TemplateBinding Message, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+                        <!-- Custom Content -->
+                        <ContentPresenter Grid.Row="3"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          IsVisible="{TemplateBinding Content, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                          Margin="0,8,0,0" />
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+
+</ResourceDictionary>

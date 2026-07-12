@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <!--
+          Single-target net8.0 (deliberate deviation from the core library's netstandard2.0;net8.0):
+          this is an internal shared orchestration layer consumed only by the net10.0 desktop app
+          (FEATURE-001) and the coming CLI (FEATURE-002). It is never packed to NuGet, so it can rely
+          on modern C# (records / init / required) without PolySharp. If Tools is ever published,
+          switch to `netstandard2.0;net8.0` + PolySharp.
+        -->
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Enigma.Cryptography" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+        <PackageReference Include="Ulid" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Enigma.LicenseManager\Enigma.LicenseManager.csproj" />
+    </ItemGroup>
+
+</Project>

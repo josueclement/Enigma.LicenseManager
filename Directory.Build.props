@@ -1,0 +1,16 @@
+<Project>
+
+  <!-- Shared settings for every project in the solution. Package versions are
+       centralized separately in Directory.Packages.props (Central Package Management). -->
+  <PropertyGroup>
+    <Authors>Josué Clément</Authors>
+    <Copyright>Copyright © 2026 Josué Clément</Copyright>
+    <LangVersion>14</LangVersion>
+    <Nullable>enable</Nullable>
+    <!-- Warnings are treated as errors across the whole solution (library, Tools, CLI, Desktop, tests). -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- Enforce the .editorconfig code-style rules (the warning-level subset) at build time. -->
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+  </PropertyGroup>
+
+</Project>
