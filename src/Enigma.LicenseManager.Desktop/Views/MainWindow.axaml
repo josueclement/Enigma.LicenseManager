@@ -11,6 +11,7 @@
        x:Class="Enigma.LicenseManager.Desktop.Views.MainWindow"
        x:DataType="vm:MainWindowViewModel"
        Title="Enigma License Manager"
+       Icon="/Assets/appicon.ico"
        Width="900" Height="550"
        Background="{DynamicResource CarbonBackgroundBrush}">
 

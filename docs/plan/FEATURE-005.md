@@ -1,6 +1,6 @@
 # FEATURE-005 — Avalonia desktop improvements
 
-**Status: IN PROGRESS** (PHASE01 DONE · PHASE02 DONE · PHASE03 TODO · PHASE04 TODO)
+**Status: IN PROGRESS** (PHASE01 DONE · PHASE02 DONE · PHASE03 DONE · PHASE04 TODO)
 
 ## Context
 
@@ -102,7 +102,7 @@ Out of scope: core library, Tools, CLI, tests project (existing tests must keep 
 - **Acceptance:** on launch (RSA selected) the key-size combo shows **4096**; switching to
   ML-DSA and back to RSA still lands on 4096; generation still parses the value correctly.
 
-## PHASE03 — Real embedded app icon · **Status: TODO**
+## PHASE03 — Real embedded app icon · **Status: DONE**
 - **Asset:** generate `src/Enigma.LicenseManager.Desktop/Assets/appicon.ico` — multi-resolution
   ICO (16/24/32/48/64/128/256) of the white Phosphor `Icon.certificate` (`IconType.fill`) glyph.
   `Helpers/AppIconHelper.cs` already contains the ICO-writing logic (`WriteIco` writes to any

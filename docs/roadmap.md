@@ -18,5 +18,5 @@ Single registry of every tracked work item. Status vocabulary: `TODO`, `IN PROGR
 | FEATURE-005 | Avalonia desktop improvements                      | IN PROGRESS | docs/plan/FEATURE-005.md |
 | - PHASE01   | Bump Avalonia 12.0.5 → 12.1.0                       | DONE   | (in FEATURE-005.md)      |
 | - PHASE02   | Default RSA key size = 4096                        | DONE   | (in FEATURE-005.md)      |
-| - PHASE03   | Real embedded app icon (`Assets/appicon.ico`)      | TODO   | (in FEATURE-005.md)      |
+| - PHASE03   | Real embedded app icon (`Assets/appicon.ico`)      | DONE   | (in FEATURE-005.md)      |
 | - PHASE04   | License profiles (save / load)                     | TODO   | (in FEATURE-005.md)      |
