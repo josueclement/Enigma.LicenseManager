@@ -1,6 +1,6 @@
 # FEATURE-005 — Avalonia desktop improvements
 
-**Status: TODO** (PHASE01 TODO · PHASE02 TODO · PHASE03 TODO · PHASE04 TODO)
+**Status: IN PROGRESS** (PHASE01 DONE · PHASE02 TODO · PHASE03 TODO · PHASE04 TODO)
 
 ## Context
 
@@ -85,7 +85,7 @@ Out of scope: core library, Tools, CLI, tests project (existing tests must keep 
 
 ---
 
-## PHASE01 — Bump Avalonia to 12.1.0 · **Status: TODO**
+## PHASE01 — Bump Avalonia to 12.1.0 · **Status: DONE**
 - **File:** `Directory.Packages.props` — change the four `Avalonia.*` `<PackageVersion>`
   lines from `12.0.5` to `12.1.0`: `Avalonia`, `Avalonia.Desktop`, `Avalonia.Fonts.Inter`,
   `Avalonia.Themes.Fluent`. Leave `AvaloniaUI.DiagnosticsSupport`, `Carbon.Avalonia.Desktop`,

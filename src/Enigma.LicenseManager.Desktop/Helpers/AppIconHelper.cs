@@ -50,7 +50,7 @@ public static class AppIconHelper
         rtb.Render(image);
 
         using var ms = new MemoryStream();
-        rtb.Save(ms);
+        rtb.Save(ms, PngBitmapEncoderOptions.Default);
         return ms.ToArray();
     }
 

@@ -15,8 +15,8 @@ Single registry of every tracked work item. Status vocabulary: `TODO`, `IN PROGR
 | - PHASE02   | `Directory.Packages.props` overhaul + non-Avalonia dependency refresh | DONE | (in FEATURE-004.md) |
 | - PHASE03   | xUnit v2 → v3 migration                            | DONE   | (in FEATURE-004.md)      |
 | - PHASE04   | Production-readiness docs + release checklist      | DONE   | (in FEATURE-004.md)      |
-| FEATURE-005 | Avalonia desktop improvements                      | TODO   | docs/plan/FEATURE-005.md |
-| - PHASE01   | Bump Avalonia 12.0.5 → 12.1.0                       | TODO   | (in FEATURE-005.md)      |
+| FEATURE-005 | Avalonia desktop improvements                      | IN PROGRESS | docs/plan/FEATURE-005.md |
+| - PHASE01   | Bump Avalonia 12.0.5 → 12.1.0                       | DONE   | (in FEATURE-005.md)      |
 | - PHASE02   | Default RSA key size = 4096                        | TODO   | (in FEATURE-005.md)      |
 | - PHASE03   | Real embedded app icon (`Assets/appicon.ico`)      | TODO   | (in FEATURE-005.md)      |
 | - PHASE04   | License profiles (save / load)                     | TODO   | (in FEATURE-005.md)      |
