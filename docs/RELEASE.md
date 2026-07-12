@@ -40,8 +40,8 @@ git pull
 Tag the merge commit and push the tag:
 
 ```bash
-git tag vX.Y.Z
-git push origin vX.Y.Z
+git tag X.Y.Z
+git push origin X.Y.Z
 ```
 
 ## 4. Pack
@@ -79,4 +79,4 @@ matching symbols automatically.
       ```bash
       dotnet add package Enigma.LicenseManager --version X.Y.Z
       ```
-- [ ] The GitHub release/tag `vX.Y.Z` is present and its notes match `RELEASENOTES.md`.
+- [ ] The GitHub release/tag `X.Y.Z` is present and its notes match `RELEASENOTES.md`.

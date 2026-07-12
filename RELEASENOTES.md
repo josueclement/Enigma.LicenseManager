@@ -1,15 +1,16 @@
 # v1.2.0 Release Notes
 
-A production-readiness release: no public API or behavioural change, but a full pass over dependencies,
-the test stack, and build configuration to align the repository with its sibling `Enigma.Cryptography`.
-This is a recompile-and-verify upgrade — licenses and keys created with earlier 1.x releases remain
-compatible.
+A production-readiness release for the core library — no public API or behavioural change to the
+library itself — with a full pass over dependencies, the test stack, and build configuration to align
+the repository with its sibling `Enigma.Cryptography`, plus a round of desktop-app usability
+improvements. The library upgrade is recompile-and-verify — licenses and keys created with earlier 1.x
+releases remain compatible.
 
 ## Dependencies
 
 - **Upgrade `Enigma.Cryptography` to 5.0.0:** The library now builds against `Enigma.Cryptography` 5.0.0 (from 4.x). The consumed cryptographic surface is source-identical between 4.3.0 and 5.0.0, so this is a recompile-and-verify with no API or behavioural change — RSA and ML-DSA sign/verify round-trips and encrypted-PEM load/save are unaffected, and licenses/keys created with 4.x remain compatible. The packaged dependency floor is now `Enigma.Cryptography >= 5.0.0`.
 - **Refresh non-Avalonia dependencies:** `coverlet.collector` 8.0.0 → 10.0.1, `Microsoft.Extensions.DependencyInjection.Abstractions` 8.0.2 → 10.0.9 (aligned with `Microsoft.Extensions.DependencyInjection` 10.0.9), `Microsoft.NET.Test.Sdk` 18.3.0 → 18.7.0, and `NLog` / `NLog.Extensions.Logging` 6.1.3 → 6.1.4. The core library's packaged dependencies (`DeviceId`, `Newtonsoft.Json`, `Ulid`) were already current and are unchanged.
-- **Hold the Avalonia ecosystem:** the four `Avalonia.*` packages plus `Carbon.Avalonia.Desktop`, `PhosphorIconsAvalonia`, and `AvaloniaUI.DiagnosticsSupport` are version-coupled to Avalonia and were deliberately held at their current versions; the Avalonia upgrade is reserved for a later release.
+- **Bump the Avalonia core to 12.1.0:** the four version-coupled `Avalonia.*` packages (`Avalonia`, `Avalonia.Desktop`, `Avalonia.Fonts.Inter`, `Avalonia.Themes.Fluent`) moved together 12.0.5 → 12.1.0. The remaining Avalonia-coupled packages — `Carbon.Avalonia.Desktop` 0.2.0, `PhosphorIconsAvalonia` 1.2.0, and `AvaloniaUI.DiagnosticsSupport` 2.2.3 — were verified compatible with 12.1.0 and held at their current (latest) versions. All Avalonia packages are Desktop-app-only and do not enter the published library's dependency floor.
 
 ## Build & Tooling
 
@@ -19,6 +20,15 @@ compatible.
 ## Tests
 
 - **Migrate to xUnit v3:** the `UnitTests` project moved from xUnit v2 to xUnit v3 on the Microsoft Testing Platform (`OutputType=Exe`, `TestingPlatformDotnetTestSupport=true`), matching the sibling repository. The `xunit` and `xunit.runner.visualstudio` packages were replaced by `xunit.v3`; the full suite passes on the new runner.
+
+## Desktop app
+
+These improvements affect the `Enigma.LicenseManager.Desktop` (Avalonia) app only; the published core library is unchanged.
+
+- **Avalonia bumped to 12.1.0** (see *Dependencies*).
+- **Default RSA key size is now 4096** on the Generate Keys page (was 2048) — a safer pre-selected default; switching to ML-DSA and back to RSA preserves it.
+- **Real embedded app icon:** a committed multi-resolution `appicon.ico` is embedded in the executable and used for the window/taskbar, replacing the previously runtime-synthesized icon.
+- **Reusable license profiles:** the Generate Licenses page can save/load the form fields (product ID, owner, device ID, signing algorithm, expiration, and signing-key path) to a `.json` profile, removing repetitive re-entry. The signing-key password is never persisted.
 
 # v1.1.0 Release Notes
 
