@@ -1,6 +1,6 @@
 # FEATURE-006 — Package the desktop app as a Windows MSI installer (1.2.0)
 
-**Status: TODO** (single-phase)
+**Status: DONE** (single-phase)
 
 ## Context
 

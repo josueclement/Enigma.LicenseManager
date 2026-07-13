@@ -29,6 +29,7 @@ These improvements affect the `Enigma.LicenseManager.Desktop` (Avalonia) app onl
 - **Default RSA key size is now 4096** on the Generate Keys page (was 2048) — a safer pre-selected default; switching to ML-DSA and back to RSA preserves it.
 - **Real embedded app icon:** a committed multi-resolution `appicon.ico` is embedded in the executable and used for the window/taskbar, replacing the previously runtime-synthesized icon.
 - **Reusable license profiles:** the Generate Licenses page can save/load the form fields (product ID, owner, device ID, signing algorithm, expiration, and signing-key path) to a `.json` profile, removing repetitive re-entry. The signing-key password is never persisted.
+- **Windows installer (MSI):** the desktop app can now be packaged as a Windows MSI installer ("Enigma License Manager", per-machine, with Start Menu and Desktop shortcuts). A committed WixSharp build profile lives under `msiProfiles/`; see [`docs/RELEASE.md`](docs/RELEASE.md) for the build steps. The app itself is unchanged.
 
 # v1.1.0 Release Notes
 
