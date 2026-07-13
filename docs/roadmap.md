@@ -20,3 +20,4 @@ Single registry of every tracked work item. Status vocabulary: `TODO`, `IN PROGR
 | - PHASE02   | Default RSA key size = 4096                        | DONE   | (in FEATURE-005.md)      |
 | - PHASE03   | Real embedded app icon (`Assets/appicon.ico`)      | DONE   | (in FEATURE-005.md)      |
 | - PHASE04   | License profiles (save / load)                     | DONE   | (in FEATURE-005.md)      |
+| FEATURE-006 | Package the desktop app as a Windows MSI installer (1.2.0) | DONE   | docs/plan/FEATURE-006.md |

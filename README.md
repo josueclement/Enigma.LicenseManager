@@ -6,6 +6,8 @@
 **Enigma.LicenseManager** is a comprehensive .NET library designed for secure license management in applications. It provides robust cryptographic protection using both traditional RSA and modern ML-DSA (FIPS 204) digital signature algorithms, ensuring your software licensing is both secure and future-proof.
 
 > **What's new in 1.2.0** — a production-readiness release: `Enigma.Cryptography` upgraded to 5.0.0, Central Package Management adopted, a non-Avalonia dependency refresh, the test suite migrated to xUnit v3, and build configuration consolidated. No public API or behavioural change — see the [release notes](RELEASENOTES.md).
+>
+> A Windows installer (MSI) for the companion desktop app is now available — see [`docs/RELEASE.md`](docs/RELEASE.md).
 
 ## Features
 

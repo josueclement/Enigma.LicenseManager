@@ -1,0 +1,30 @@
+{
+  "appName": "Enigma License Manager",
+  "installPath": "%ProgramFiles%\\Enigma License Manager",
+  "releasePath": "src\\Enigma.LicenseManager.Desktop\\bin\\Release\\net10.0",
+  "scope": "PerMachine",
+  "version": "1.2.0",
+  "productId": "61c9a745-ea1b-4efd-aade-94cdff7006e4",
+  "upgradeCode": "86a46add-9e89-4a0a-ac28-2c31001c1af4",
+  "manufacturer": "Josué Clément",
+  "productIcon": "src\\Enigma.LicenseManager.Desktop\\Assets\\appicon.ico",
+  "compression": "High",
+  "outputPath": "<USER-DEFINED — the user fills this in>",
+  "msiFilename": "Enigma.LicenseManager.Desktop",
+  "shortcuts": [
+    {
+      "shortcutPath": "%Desktop%",
+      "shortcutName": "Enigma License Manager",
+      "targetPath": "[INSTALLDIR]\\Enigma.LicenseManager.Desktop.exe",
+      "iconPath": "src\\Enigma.LicenseManager.Desktop\\Assets\\appicon.ico",
+      "arguments": ""
+    },
+    {
+      "shortcutPath": "%ProgramMenu%",
+      "shortcutName": "Enigma License Manager",
+      "targetPath": "[INSTALLDIR]\\Enigma.LicenseManager.Desktop.exe",
+      "iconPath": "src\\Enigma.LicenseManager.Desktop\\Assets\\appicon.ico",
+      "arguments": ""
+    }
+  ]
+}
